@@ -839,7 +839,6 @@ class Bot {
     float time_elapsed = 0;
     stagn temp1, temp2;
     vector<vector<int>> tcon;
-    bool stag;
     board *game;
 
     Bot() {
@@ -855,18 +854,11 @@ class Bot {
                 if (!choice) {
                     move = move.substr(0, 11);
                 } else {
-                    if (same(temp1.con1, game->config)) {
-                        tcon = temp1.con2;
-                        stag = 1;
-                    } else if (same(temp2.con1, game->config)) {
-                        tcon = temp2.con2;
-                        stag = 1;
-                    } else
-                        stag = 0;
                     clock_t starttime = clock();
                     result x = game->idd(
-                        90 + (ns + ms - 16) * 7.5 - time_elapsed, tcon, stag);
+                        90 + (ns + ms - 16) * 7.5 - time_elapsed, tcon, 0);
                     strategy = x.plan;
+                    cout << strategy.size() << endl;
                     move = strategy[0];
                     cout << move << endl;
                     temp1 = temp2;
@@ -891,25 +883,12 @@ class Bot {
                         cout << move << endl;
                         cx = 3;
                     } else {
-                        // cerr << temp1.mov << endl;
-                        // cerr << temp2.mov << endl;
-                        if (same(temp1.con1, game->config)) {
-                            tcon = temp1.con2;
-                            stag = 1;
-                        } else if (same(temp2.con1, game->config)) {
-                            tcon = temp2.con2;
-                            stag = 1;
-                        } else
-                            stag = 0;
                         clock_t starttime = clock();
-                        // cerr << "WTF" << "\n";
-                        // cerr << game->valid_moves(0).size() << endl;
                         result x =
                             game->idd(90 + (ns + ms - 16) * 7.5 - time_elapsed,
-                                      tcon, stag);
-                        // cerr << "Shit" << "\n";
+                                      tcon, 0);
                         strategy = x.plan;
-                        // cerr << strategy.size() << endl;
+                        cout << strategy.size() << endl;
                         move = strategy[0];
                         cout << move << endl;
                         temp1 = temp2;
@@ -919,10 +898,7 @@ class Bot {
                     }
                 }
             }
-            if (game->make_move(move)) {
-                if ((!choice && game->player) || (choice && !game->player))
-                    temp2.con2 = game->config;
-            }
+            game->make_move(move);
         }
         return move;
     }
