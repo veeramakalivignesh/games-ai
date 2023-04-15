@@ -928,10 +928,12 @@ class Bot {
     }
 };
 
+// interface with c to be used as a python library
 extern "C" {
-    Bot *new_bot() { return new Bot(); }
-    void get_move(Bot *bot, char *c_move, char *c_buffer) {
-        string move = c_move;
+    void *new_bot() { return new Bot(); }
+
+    void find_best_move(Bot *bot, char *c_move, char *c_buffer) {
+        string move = (string)c_move;
         string response_move = bot->bot_loop(move);
         strcpy(c_buffer, response_move.c_str());
     }

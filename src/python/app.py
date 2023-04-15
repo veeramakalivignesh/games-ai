@@ -1,27 +1,21 @@
 from fastapi import Request, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.python.cannon_bot import CannonBot
-from ctypes import c_wchar_p
-
-origins = [
-    "http://localhost:3000",
-]
+from src.python.cannon_bot_service import CannonBotService
 
 app = FastAPI()
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-bot = CannonBot()
+bot_service = CannonBotService()
 
 @app.post("/move")
 async def find_best_move(request: Request):
     body = await request.json()
-    response_move = bot.get_move(body["move"])
+    response_move = bot_service.find_best_move(body["move"])
     body["move"] = response_move
     return body
