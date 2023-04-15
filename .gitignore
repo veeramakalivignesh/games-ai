@@ -1,0 +1,5 @@
+# binaries
+/bin
+
+# pycache
+__pycache__
