@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-int ns, ms;
+int ns=8, ms=8;
 
 struct soldier {
     int x, y;
@@ -410,6 +410,44 @@ class board {
         whitec = update_cannons(whites, config);
     }
 
+    board(vector<vector<int>> config, bool player) {
+        this->config = config;
+        this->player = player;
+
+        soldier temps;
+        for (int i = 0; i < config.size(); i++) {
+            for (int j = 0; j < config[0].size(); j++) {
+                if (config[i][j] == 1) {
+                    temps.x = i;
+                    temps.y = j;
+                    temps.colour = 1;
+                    whites.push_back(temps);
+                } else if(config[i][j] == -1) {
+                    temps.x = i;
+                    temps.y = j;
+                    temps.colour = 0;
+                    blacks.push_back(temps);
+                }
+            }
+        }
+
+        for (int i = 0; i < ms / 2; i++) {
+            if (config[2 * i][0] == 2) {
+                wtown[i] = 1;
+            } else {
+                wtown[i] = 0;
+            }
+            if (config[2 * i + 1][ns - 1] == -2) {
+                btown[i] = 1;
+            } else {
+                btown[i] = 0;
+            }
+        }
+
+        blackc = update_cannons(blacks, config);
+        whitec = update_cannons(whites, config);
+    }
+
     vector<string> valid_moves(bool mode) {
         int i;
         vector<string> ans, temp;
@@ -769,12 +807,12 @@ class board {
         return ans;
     }
 
-    result idd(float time_left, vector<vector<int>> tcon, bool stag) {
+    result idd( vector<vector<int>> tcon, bool stag) {
         // cerr << "idd start" << "\n";
         clock_t starttime = clock();
         result ans, x, temp_ans;
         int i, s1 = whites.size(), s2 = blacks.size(), n = s1 + s2, j = 4;
-        float t = time_left / (2 * n), temp;
+        float t = 2, temp;
         vector<string> killer;
         //  if(time_left<=20)
         //  t = time_left/n ;
@@ -833,73 +871,18 @@ class board {
 
 class Bot {
   public:
-    int cx = 3;
-    bool choice;
-    vector<string> strategy;
-    float time_elapsed = 0;
-    stagn temp1, temp2;
-    vector<vector<int>> tcon;
-    board *game;
+    string find_best_move(vector<vector<int>> config, bool player) {
+        board *game = new board(config, player);
+        vector<vector<int>> tcon;
 
-    Bot() {
-        choice = 1;
-        ns = 8;
-        ms = 8;
-        game = new board();
-    }
+        result x = game->idd(tcon, 0);
+        vector<string> strategy = x.plan;
+        cout << strategy.size() << endl;
 
-    string bot_loop(string move) {
-        for (int i = 0; i < 2; i++) {
-            if (game->player) {
-                if (!choice) {
-                    move = move.substr(0, 11);
-                } else {
-                    clock_t starttime = clock();
-                    result x = game->idd(
-                        90 + (ns + ms - 16) * 7.5 - time_elapsed, tcon, 0);
-                    strategy = x.plan;
-                    cout << strategy.size() << endl;
-                    move = strategy[0];
-                    cout << move << endl;
-                    temp1 = temp2;
-                    temp2.con1 = game->config;
-                    time_elapsed +=
-                        (float)(clock() - starttime) / CLOCKS_PER_SEC;
-                }
-            } else {
-                if (choice) {
-                    move = move.substr(0, 11);
-                } else {
-                    if (cx == 0) {
-                        move = "S 2 7 M 1 6";
-                        cout << move << endl;
-                        cx = 3;
-                    } else if (cx == 1) {
-                        move = "S 2 9 M 3 8";
-                        cout << move << endl;
-                        cx = 3;
-                    } else if (cx == 2) {
-                        move = "S 2 9 M 3 8";
-                        cout << move << endl;
-                        cx = 3;
-                    } else {
-                        clock_t starttime = clock();
-                        result x =
-                            game->idd(90 + (ns + ms - 16) * 7.5 - time_elapsed,
-                                      tcon, 0);
-                        strategy = x.plan;
-                        cout << strategy.size() << endl;
-                        move = strategy[0];
-                        cout << move << endl;
-                        temp1 = temp2;
-                        temp2.con1 = game->config;
-                        time_elapsed +=
-                            (float)(clock() - starttime) / CLOCKS_PER_SEC;
-                    }
-                }
-            }
-            game->make_move(move);
-        }
+        string move = strategy[0];
+        cout << move << endl;
+
+        game->make_move(move);
         return move;
     }
 };
@@ -908,9 +891,18 @@ class Bot {
 extern "C" {
     void *new_bot() { return new Bot(); }
 
-    void find_best_move(Bot *bot, char *c_move, char *c_buffer) {
-        string move = (string)c_move;
-        string response_move = bot->bot_loop(move);
-        strcpy(c_buffer, response_move.c_str());
+    void find_best_move(Bot *bot, int **gameStateArr, int numRows, int numColumns, bool isBlackTurn, char *responseMoveBuffer) {
+        // create c++ vector from array
+        vector<vector<int>> gameState;
+        for(int i=0; i<numColumns; i++) {
+            vector<int> column;
+            for(int j=0; j<numRows; j++) {
+                column.push_back(gameStateArr[j][i]);
+            }
+            gameState.push_back(column);
+        }
+
+        string responseMove = bot->find_best_move(gameState, !isBlackTurn);
+        strcpy(responseMoveBuffer, responseMove.c_str());
     }
 }

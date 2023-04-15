@@ -15,7 +15,7 @@ bot_service = CannonBotService()
 
 @app.post("/move")
 async def find_best_move(request: Request):
-    body = await request.json()
-    response_move = bot_service.find_best_move(body["gameState"], body["isBlackTurn"])
-    # body["move"] = response_move
-    return body
+    request_body = await request.json()
+    response_move = bot_service.find_best_move(request_body["gameState"], request_body["isBlackTurn"])
+    response_body = {"move": response_move}
+    return response_body

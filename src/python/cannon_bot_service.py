@@ -33,7 +33,6 @@ class CannonBotService():
         # convert game_state into 2d c array
         int_game_state = CannonBotService.convert_game_state_to_int(game_state)
         (c_game_state, c_num_rows, c_num_columns) = CannonBotService.convert_list_to_cint_array(int_game_state)
-        print(c_num_rows, c_num_columns)
 
         # buffer on which the response move will be written
         c_response_move_buffer = create_string_buffer(11)
