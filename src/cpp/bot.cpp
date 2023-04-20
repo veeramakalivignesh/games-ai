@@ -168,11 +168,11 @@ vector<string> sold_moves(soldier s, vector<vector<int>> &config) {
         temp += s.y + 48;
         ans.push_back(temp);
     }
-    if ((s.y + col <= ns - 1 && s.y + col <= ns - 1 &&
+    if ((s.y + col >= 0 && s.y + col <= ns - 1 &&
          config[s.x][s.y + col] == -col) ||
-        (s.y + col <= ns - 1 && s.y + col <= ns - 1 && s.x < ms - 1 &&
+        (s.y + col >= 0 && s.y + col <= ns - 1 && s.x < ms - 1 &&
          config[s.x + 1][s.y + col] == -col) ||
-        (s.y + col <= ns - 1 && s.y + col <= ns - 1 && s.x > 0 &&
+        (s.y + col >= 0 && s.y + col <= ns - 1 && s.x > 0 &&
          config[s.x - 1][s.y + col] == -col) ||
         (s.x < ms - 1 && config[s.x + 1][s.y] == -col) ||
         (s.x > 0 && config[s.x - 1][s.y] == -col)) {

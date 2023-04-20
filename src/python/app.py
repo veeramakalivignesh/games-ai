@@ -13,7 +13,14 @@ app.add_middleware(
 
 bot_service = CannonBotService()
 
-@app.post("/move")
+@app.post("/primary/move")
+async def find_best_move(request: Request):
+    request_body = await request.json()
+    response_move = bot_service.find_best_move(request_body["gameState"], request_body["isBlackTurn"])
+    response_body = {"move": response_move}
+    return response_body
+
+@app.post("/secondary/move")
 async def find_best_move(request: Request):
     request_body = await request.json()
     response_move = bot_service.find_best_move(request_body["gameState"], request_body["isBlackTurn"])
