@@ -807,6 +807,7 @@ class board {
         return ans;
     }
 
+    // time logic need to be tested
     result idd( vector<vector<int>> tcon, bool stag) {
         // cerr << "idd start" << "\n";
         clock_t starttime = clock();
@@ -827,6 +828,8 @@ class board {
         for (i = j, killer.clear();; i++) {
             ////cerr << ns << " " << ms << " " << i << endl;
             temp = (float)(clock() - starttime) / CLOCKS_PER_SEC;
+            // need to be changed to use the bigger one after strict time cut
+            // can be commented
             if (temp >= t) {
                 if ((player && temp_ans.payoff >= ans.payoff) ||
                     (!player && temp_ans.payoff <= ans.payoff)) {
@@ -887,6 +890,20 @@ class Bot {
     }
 };
 
+string invertMove(string move) {
+    char temp;
+
+    temp = move[2];
+    move[2] = move[4];
+    move[4] = temp;
+
+    temp = move[8];
+    move[8] = move[10];
+    move[10] = temp;
+
+    return move;
+}
+
 // interface with c to be used as a python library
 extern "C" {
     void *new_bot() { return new Bot(); }
@@ -902,7 +919,7 @@ extern "C" {
             gameState.push_back(column);
         }
 
-        string responseMove = bot->find_best_move(gameState, !isBlackTurn);
+        string responseMove = invertMove(bot->find_best_move(gameState, !isBlackTurn));
         strcpy(responseMoveBuffer, responseMove.c_str());
     }
 }
