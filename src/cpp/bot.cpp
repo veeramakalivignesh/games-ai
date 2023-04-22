@@ -604,43 +604,10 @@ class board {
             if (btown[i] == 1) b++;
         }
 
-        if (stale) {
-            if (ys == 0) {
-                if (b == (ms / 2) && w == (ms / 2)) ans = 8;
-                if (b == (ms / 2) - 1 && w == (ms / 2) - 1) ans = 8;
-                if (b == (ms / 2) - 1 && w == (ms / 2)) ans = 10;
-                if (b == (ms / 2) && w == (ms / 2) - 1) ans = 6;
-            }
-
-            else if (xs == 0) {
-                if (b == (ms / 2) && w == (ms / 2)) ans = 2;
-                if (b == (ms / 2) - 1 && w == (ms / 2) - 1) ans = 2;
-                if (b == (ms / 2) - 1 && w == (ms / 2)) ans = 4;
-                if (b == (ms / 2) && w == (ms / 2) - 1) ans = 0;
-            }
-
-            else if (player) {
-                if (b == (ms / 2) && w == (ms / 2)) ans = 4;
-                if (b == (ms / 2) - 1 && w == (ms / 2) - 1) ans = 4;
-                if (b == (ms / 2) - 1 && w == (ms / 2)) ans = 6;
-                if (b == (ms / 2) && w == (ms / 2) - 1) ans = 2;
-            }
-
-            else {
-                if (b == (ms / 2) && w == (ms / 2)) ans = 6;
-                if (b == (ms / 2) - 1 && w == (ms / 2) - 1) ans = 6;
-                if (b == (ms / 2) - 1 && w == (ms / 2)) ans = 8;
-                if (b == (ms / 2) && w == (ms / 2) - 1) ans = 4;
-            }
-            // if(ys==0)
-            //   cerr << "hi " << ans << endl;
-        } else {
-            if (b == (ms / 2) && w == (ms / 2)) ans = 5;
-            if (b == (ms / 2) - 1 && w == (ms / 2) - 1) ans = 5;
-            if (b == (ms / 2) - 1 && w == (ms / 2)) ans = 7;
-            if (b == (ms / 2) && w == (ms / 2) - 1) ans = 3;
-        }
-
+        if (b == (ms / 2) && w == (ms / 2)) ans = 5;
+        if (b == (ms / 2) - 1 && w == (ms / 2) - 1) ans = 5;
+        if (b == (ms / 2) - 1 && w == (ms / 2)) ans = 7;
+        if (b == (ms / 2) && w == (ms / 2) - 1) ans = 3;
         if (b == (ms / 2) - 2 && w == (ms / 2) - 1) ans = 8;
         if (b == (ms / 2) - 1 && w == (ms / 2) - 2) ans = 2;
         if (b == (ms / 2) && w == (ms / 2) - 2) ans = 0;
@@ -831,11 +798,11 @@ class board {
             // need to be changed to use the bigger one after strict time cut
             // can be commented
             if (temp >= t) {
-                if ((player && temp_ans.payoff >= ans.payoff) ||
-                    (!player && temp_ans.payoff <= ans.payoff)) {
-                    i--;
-                    ans = temp_ans;
-                }
+                // if ((player && temp_ans.payoff >= ans.payoff) ||
+                //     (!player && temp_ans.payoff <= ans.payoff)) {
+                //     i--;
+                //     ans = temp_ans;
+                // }
                 // cerr << i-1 << endl;
                 // for(int k =0; k<ans.plan.size(); k++)
                 //   cerr << ans.plan[k] << endl;
