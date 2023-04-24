@@ -27,26 +27,32 @@ Position getPositionProductWithScalar(float scalar, Position position) {
 }
 
 bool isPositionValid(Position &position) {
-    return position.i >= 0 && position.i < n && position.j >= 0 &&
-           position.j < m;
+    return position.i >= 0 && position.i < n && position.j >= 0 && position.j < m;
 }
 
-int getPiece(vector<vector<int>> &gameState, Position &position) {
-    return gameState[position.i][position.j];
+int getPiece(vector<vector<int>> &gameState, Position &position) { return gameState[position.i][position.j]; }
+
+bool isEmpty(vector<vector<int>> &gameState, Position &position) { return getPiece(gameState, position) == 0; }
+
+bool isBlack(vector<vector<int>> &gameState, Position &position) { return getPiece(gameState, position) < 0; }
+
+bool isSoldier(vector<vector<int>> &gameState, Position &position) {
+    return getPiece(gameState, position) == 1 && getPiece(gameState, position) == -1;
 }
 
-bool isCannonExists(vector<vector<int>> &gameState, Position &rearEnd,
-                    Position &middlePosition, Position &frontEnd) {
+bool areOpponents(vector<vector<int>> &gameState, Position &positionA, Position positionB) {
+    return getPiece(gameState, positionA) * getPiece(gameState, positionB) < 0;
+}
+
+bool isCannonExists(vector<vector<int>> &gameState, Position &rearEnd, Position &middlePosition, Position &frontEnd) {
     int rearPiece = getPiece(gameState, rearEnd);
     int middlePiece = getPiece(gameState, middlePosition);
     int frontPiece = getPiece(gameState, frontEnd);
 
-    return ((rearPiece == 1 || rearPiece == -1) && frontPiece == rearPiece &&
-            middlePiece == rearPiece);
+    return ((rearPiece == 1 || rearPiece == -1) && frontPiece == rearPiece && middlePiece == rearPiece);
 }
 
-vector<Cannon> getCannonsWithMiddlePosition(vector<vector<int>> &gameState,
-                                            Position &position) {
+vector<Cannon> getCannonsWithMiddlePosition(vector<vector<int>> &gameState, Position position) {
     bool isBlack = (getPiece(gameState, position) == -1) ? true : false;
     vector<Cannon> cannons;
 
@@ -85,54 +91,204 @@ vector<Cannon> getCannonsWithMiddlePosition(vector<vector<int>> &gameState,
     return cannons;
 }
 
-string getMove(bool isBomb, Position selectedPosition,
-               Position targetPosition) {
-    string move = "S " + to_string(selectedPosition.i) + " " +
-                  to_string(selectedPosition.j) + " ";
+string getMove(bool isBomb, Position selectedPosition, Position targetPosition) {
+    string move = "S " + to_string(selectedPosition.i) + " " + to_string(selectedPosition.j) + " ";
     isBomb ? move += "B " : move += "M ";
     move += to_string(targetPosition.i) + " " + to_string(targetPosition.j);
     return move;
 }
 
-string getCannonBombMoves(vector<vector<int>> &gameState, Cannon &cannon) {
-    Position offset = getPositionProductWithScalar(
-        0.5, getPositionDifference(cannon.frontEnd, cannon.rearEnd));
+vector<string> getCannonBombMoves(vector<vector<int>> &gameState, Cannon &cannon) {
+    Position offset = getPositionProductWithScalar(0.5, getPositionDifference(cannon.frontEnd, cannon.rearEnd));
     Position immediateFront = getPositionSum(cannon.frontEnd, offset);
-    bool isFrontBlocked = isPositionValid(immediateFront) &&
-                          getPiece(gameState, immediateFront) != 0;
+    bool isFrontBlocked = isPositionValid(immediateFront) && !isEmpty(gameState, immediateFront);
 
-    offset = getPositionProductWithScalar(
-        0.5, getPositionDifference(cannon.rearEnd, cannon.frontEnd));
+    offset = getPositionProductWithScalar(0.5, getPositionDifference(cannon.rearEnd, cannon.frontEnd));
     Position immediateBack = getPositionSum(cannon.rearEnd, offset);
-    bool isBackBlocked = isPositionValid(immediateBack) &&
-                          getPiece(gameState, immediateBack) != 0;
+    bool isBackBlocked = isPositionValid(immediateBack) && !isEmpty(gameState, immediateBack);
 
     vector<string> cannonBombMoves;
     Position bombTarget;
-    if(!isFrontBlocked) {
+    if (!isFrontBlocked) {
+        // shoot 2 steps front
         offset = getPositionDifference(cannon.frontEnd, cannon.rearEnd);
-        bombTarget = getPositionSum(cannon.frontEnd, offset); 
+        bombTarget = getPositionSum(cannon.frontEnd, offset);
+        if (isPositionValid(bombTarget) &&
+            (areOpponents(gameState, cannon.rearEnd, bombTarget) || isEmpty(gameState, bombTarget))) {
+            cannonBombMoves.push_back(getMove(true, cannon.rearEnd, bombTarget));
+        }
+
+        // shoot 3 steps front
+        offset = getPositionProductWithScalar(1.5, getPositionDifference(cannon.frontEnd, cannon.rearEnd));
+        bombTarget = getPositionSum(cannon.frontEnd, offset);
+        if (isPositionValid(bombTarget) &&
+            (areOpponents(gameState, cannon.rearEnd, bombTarget) || isEmpty(gameState, bombTarget))) {
+            cannonBombMoves.push_back(getMove(true, cannon.rearEnd, bombTarget));
+        }
     }
+    if (!isBackBlocked) {
+        // shoot 2 steps back
+        offset = getPositionDifference(cannon.rearEnd, cannon.frontEnd);
+        bombTarget = getPositionSum(cannon.rearEnd, offset);
+        if (isPositionValid(bombTarget) &&
+            (areOpponents(gameState, cannon.rearEnd, bombTarget) || isEmpty(gameState, bombTarget))) {
+            cannonBombMoves.push_back(getMove(true, cannon.rearEnd, bombTarget));
+        }
+
+        // shoot 3 steps back
+        offset = getPositionProductWithScalar(1.5, getPositionDifference(cannon.rearEnd, cannon.frontEnd));
+        bombTarget = getPositionSum(cannon.rearEnd, offset);
+        if (isPositionValid(bombTarget) &&
+            (areOpponents(gameState, cannon.rearEnd, bombTarget) || isEmpty(gameState, bombTarget))) {
+            cannonBombMoves.push_back(getMove(true, cannon.rearEnd, bombTarget));
+        }
+    }
+
+    return cannonBombMoves;
+}
+
+vector<string> getCannonMoves(vector<vector<int>> &gameState, Cannon &cannon) {
+    vector<string> cannonMoves;
+
+    // move one step front
+    Position offset = getPositionProductWithScalar(0.5, getPositionDifference(cannon.frontEnd, cannon.rearEnd));
+    Position moveTarget = getPositionSum(cannon.frontEnd, offset);
+    if(isPositionValid(moveTarget) && isEmpty(gameState, moveTarget)) {
+        cannonMoves.push_back(getMove(false, cannon.rearEnd, moveTarget));
+    }
+
+    // move one step back
+    offset = getPositionProductWithScalar(0.5, getPositionDifference(cannon.frontEnd, cannon.rearEnd));
+    moveTarget = getPositionSum(cannon.frontEnd, offset);
+    if(isPositionValid(moveTarget) && isEmpty(gameState, moveTarget)) {
+        cannonMoves.push_back(getMove(false, cannon.rearEnd, moveTarget));
+    }
+
+    return cannonMoves;
+}
+
+vector<string> getSoldierMoves(vector<vector<int>> &gameState, Position soldierPosition) {
+    vector<string> soldierMoves;
+    int forwardOffset = isBlack(gameState, soldierPosition) ? -1 : 1;
+    bool isUnderAttack = false;
+
+    // move 1 step front
+    Position moveTarget = getPositionSum(soldierPosition, {forwardOffset, 0});
+    if (isPositionValid(moveTarget) &&
+        (areOpponents(gameState, soldierPosition, moveTarget) || isEmpty(gameState, moveTarget))) {
+        if (isSoldier(gameState, moveTarget)) {
+            isUnderAttack = true;
+        }
+        soldierMoves.push_back(getMove(false, soldierPosition, moveTarget));
+    }
+
+    // move one step along diagonals
+    moveTarget = getPositionSum(soldierPosition, {forwardOffset, 1});
+    if (isPositionValid(moveTarget) &&
+        (areOpponents(gameState, soldierPosition, moveTarget) || isEmpty(gameState, moveTarget))) {
+        if (isSoldier(gameState, moveTarget)) {
+            isUnderAttack = true;
+        }
+        soldierMoves.push_back(getMove(false, soldierPosition, moveTarget));
+    }
+
+    moveTarget = getPositionSum(soldierPosition, {forwardOffset, -1});
+    if (isPositionValid(moveTarget) &&
+        (areOpponents(gameState, soldierPosition, moveTarget) || isEmpty(gameState, moveTarget))) {
+        if (isSoldier(gameState, moveTarget)) {
+            isUnderAttack = true;
+        }
+        soldierMoves.push_back(getMove(false, soldierPosition, moveTarget));
+    }
+
+    // capture one step horizontally
+    moveTarget = getPositionSum(soldierPosition, {0, 1});
+    if (isPositionValid(moveTarget) && areOpponents(gameState, soldierPosition, moveTarget)) {
+        if (isSoldier(gameState, moveTarget)) {
+            isUnderAttack = true;
+        }
+        soldierMoves.push_back(getMove(false, soldierPosition, moveTarget));
+    }
+
+    moveTarget = getPositionSum(soldierPosition, {0, -1});
+    if (isPositionValid(moveTarget) && areOpponents(gameState, soldierPosition, moveTarget)) {
+        if (isSoldier(gameState, moveTarget)) {
+            isUnderAttack = true;
+        }
+        soldierMoves.push_back(getMove(false, soldierPosition, moveTarget));
+    }
+
+    if (isUnderAttack) {
+        // retreat 2 steps backward
+        moveTarget = getPositionSum(soldierPosition, {-2 * forwardOffset, 0});
+        if (isPositionValid(moveTarget) &&
+            (areOpponents(gameState, soldierPosition, moveTarget) || isEmpty(gameState, moveTarget))) {
+            soldierMoves.push_back(getMove(false, soldierPosition, moveTarget));
+        }
+
+        // retreat 2 steps along diagonals
+        moveTarget = getPositionSum(soldierPosition, {-2 * forwardOffset, -2});
+        if (isPositionValid(moveTarget) &&
+            (areOpponents(gameState, soldierPosition, moveTarget) || isEmpty(gameState, moveTarget))) {
+            soldierMoves.push_back(getMove(false, soldierPosition, moveTarget));
+        }
+
+        moveTarget = getPositionSum(soldierPosition, {-2 * forwardOffset, 2});
+        if (isPositionValid(moveTarget) &&
+            (areOpponents(gameState, soldierPosition, moveTarget) || isEmpty(gameState, moveTarget))) {
+            soldierMoves.push_back(getMove(false, soldierPosition, moveTarget));
+        }
+    }
+
+    return soldierMoves;
+}
+
+vector<Cannon> getAllCannons(vector<vector<int>> &gameState, bool isBlack) {
+    int soldier = isBlack ? -1 : 1;
+    vector<Cannon> cannons;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (gameState[i][j] == soldier) {
+                vector<Cannon> cannonsForSoldier = getCannonsWithMiddlePosition(gameState, {i, j});
+                cannons.insert(cannons.end(), cannonsForSoldier.begin(), cannonsForSoldier.end());
+            }
+        }
+    }
+
+    return cannons;
 }
 
 //************//
 
-void CannonBot::setGameState(vector<vector<int>> gameState) {
-    this->gameState = gameState;
-}
+void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }
 
 vector<string> CannonBot::getValidMoves(bool isBlackTurn) {
+    vector<string> validMoves;
 
+    vector<Cannon> cannons = getAllCannons(this->gameState, isBlackTurn);
+    for (Cannon cannon : cannons) {
+        vector<string> cannonBombMoves = getCannonBombMoves(this->gameState, cannon);
+        vector<string> cannonMoves = getCannonMoves(this->gameState, cannon);
+        validMoves.insert(validMoves.end(), cannonBombMoves.begin(), cannonBombMoves.end());
+        validMoves.insert(validMoves.end(), cannonMoves.begin(), cannonMoves.end());
+    }
+
+    int soldier = isBlack ? -1 : 1;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (this->gameState[i][j] == soldier) {
+                vector<string> soldierMoves = getSoldierMoves(this->gameState, {i, j});
+                validMoves.insert(validMoves.end(), soldierMoves.begin(), soldierMoves.end());
+            }
+        }
+    }
+
+    return validMoves;
 }
 
-void CannonBot::executeMove(string move){
+void CannonBot::executeMove(string move) {}
 
-}
+bool CannonBot::isGameOver() {}
 
-bool CannonBot::isGameOver() {
-
-}
-
-float CannonBot::getUtility() {
-
-}
+float CannonBot::getUtility() {}
