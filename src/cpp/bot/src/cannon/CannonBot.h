@@ -1,7 +1,7 @@
 #ifndef CANNONBOT_H
 #define CANNONBOT_H
 
-#include "AbstractBot.h"
+#include "../AbstractBot.h"
 
 class CannonBot : public AbstractBot {
   private:
@@ -9,6 +9,7 @@ class CannonBot : public AbstractBot {
 
   public:
     void setGameState(vector<vector<int>> gameState);
+    void printGame();
 
     vector<string> getValidMoves(bool isBlackTurn);
     void executeMove(string move);

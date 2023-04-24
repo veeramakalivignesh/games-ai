@@ -1,7 +1,8 @@
 #ifndef BOTINTERFACE_H
 #define BOTINTERFACE_H
 
-#include "AbstractBot.h"
+#include "../../src/AbstractBot.h"
+#include "../../src/cannon/CannonBot.h"
 
 enum Game { Cannon };
 
@@ -27,10 +28,13 @@ extern "C" {
         for (int i = 0; i < numColumns; i++) {
             vector<int> column;
             for (int j = 0; j < numRows; j++) {
-                column.push_back(gameStateArr[j][i]);
+                column.push_back(gameStateArr[i][j]);
             }
             gameState.push_back(column);
         }
+
+        CannonBot* cannonBot = dynamic_cast<CannonBot*> (bot->botImplementation);
+        cannonBot->setGameState(gameState);
 
         string responseMove = bot->findBestMove(isBlackTurn);
         strcpy(responseMoveBuffer, responseMove.c_str());

@@ -32,12 +32,16 @@ bool isPositionValid(Position &position) {
 
 int getPiece(vector<vector<int>> &gameState, Position &position) { return gameState[position.i][position.j]; }
 
+void setPiece(vector<vector<int>> &gameState, Position &position, int piece) {
+    gameState[position.i][position.j] = piece;
+}
+
 bool isEmpty(vector<vector<int>> &gameState, Position &position) { return getPiece(gameState, position) == 0; }
 
 bool isBlack(vector<vector<int>> &gameState, Position &position) { return getPiece(gameState, position) < 0; }
 
 bool isSoldier(vector<vector<int>> &gameState, Position &position) {
-    return getPiece(gameState, position) == 1 && getPiece(gameState, position) == -1;
+    return getPiece(gameState, position) == 1 || getPiece(gameState, position) == -1;
 }
 
 bool areOpponents(vector<vector<int>> &gameState, Position &positionA, Position positionB) {
@@ -132,7 +136,7 @@ vector<string> getCannonBombMoves(vector<vector<int>> &gameState, Cannon &cannon
         bombTarget = getPositionSum(cannon.rearEnd, offset);
         if (isPositionValid(bombTarget) &&
             (areOpponents(gameState, cannon.rearEnd, bombTarget) || isEmpty(gameState, bombTarget))) {
-            cannonBombMoves.push_back(getMove(true, cannon.rearEnd, bombTarget));
+            cannonBombMoves.push_back(getMove(true, cannon.frontEnd, bombTarget));
         }
 
         // shoot 3 steps back
@@ -140,7 +144,7 @@ vector<string> getCannonBombMoves(vector<vector<int>> &gameState, Cannon &cannon
         bombTarget = getPositionSum(cannon.rearEnd, offset);
         if (isPositionValid(bombTarget) &&
             (areOpponents(gameState, cannon.rearEnd, bombTarget) || isEmpty(gameState, bombTarget))) {
-            cannonBombMoves.push_back(getMove(true, cannon.rearEnd, bombTarget));
+            cannonBombMoves.push_back(getMove(true, cannon.frontEnd, bombTarget));
         }
     }
 
@@ -153,15 +157,15 @@ vector<string> getCannonMoves(vector<vector<int>> &gameState, Cannon &cannon) {
     // move one step front
     Position offset = getPositionProductWithScalar(0.5, getPositionDifference(cannon.frontEnd, cannon.rearEnd));
     Position moveTarget = getPositionSum(cannon.frontEnd, offset);
-    if(isPositionValid(moveTarget) && isEmpty(gameState, moveTarget)) {
+    if (isPositionValid(moveTarget) && isEmpty(gameState, moveTarget)) {
         cannonMoves.push_back(getMove(false, cannon.rearEnd, moveTarget));
     }
 
     // move one step back
-    offset = getPositionProductWithScalar(0.5, getPositionDifference(cannon.frontEnd, cannon.rearEnd));
-    moveTarget = getPositionSum(cannon.frontEnd, offset);
-    if(isPositionValid(moveTarget) && isEmpty(gameState, moveTarget)) {
-        cannonMoves.push_back(getMove(false, cannon.rearEnd, moveTarget));
+    offset = getPositionProductWithScalar(0.5, getPositionDifference(cannon.rearEnd, cannon.frontEnd));
+    moveTarget = getPositionSum(cannon.rearEnd, offset);
+    if (isPositionValid(moveTarget) && isEmpty(gameState, moveTarget)) {
+        cannonMoves.push_back(getMove(false, cannon.frontEnd, moveTarget));
     }
 
     return cannonMoves;
@@ -261,6 +265,20 @@ vector<Cannon> getAllCannons(vector<vector<int>> &gameState, bool isBlack) {
 
 //************//
 
+void CannonBot::printGame() {
+    int i, j;
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 8; j++) {
+            if (this->gameState[i][j] == 2) cout << "T ";
+            if (this->gameState[i][j] == 1) cout << "W ";
+            if (this->gameState[i][j] == 0) cout << "0 ";
+            if (this->gameState[i][j] == -1) cout << "B ";
+            if (this->gameState[i][j] == -2) cout << "U ";
+        }
+        cout << endl;
+    }
+}
+
 void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }
 
 vector<string> CannonBot::getValidMoves(bool isBlackTurn) {
@@ -274,7 +292,7 @@ vector<string> CannonBot::getValidMoves(bool isBlackTurn) {
         validMoves.insert(validMoves.end(), cannonMoves.begin(), cannonMoves.end());
     }
 
-    int soldier = isBlack ? -1 : 1;
+    int soldier = isBlackTurn ? -1 : 1;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
             if (this->gameState[i][j] == soldier) {
@@ -287,8 +305,19 @@ vector<string> CannonBot::getValidMoves(bool isBlackTurn) {
     return validMoves;
 }
 
-void CannonBot::executeMove(string move) {}
+void CannonBot::executeMove(string move) {
+    Position selectedPosition = {move[2] - '0', move[4] - '0'};
+    Position targetPosition = {move[8] - '0', move[10] - '0'};
+    bool isBomb = move[6] == 'B' ? true : false;
 
-bool CannonBot::isGameOver() {}
+    if (isBomb) {
+        setPiece(this->gameState, targetPosition, 0);
+    } else {
+        setPiece(this->gameState, targetPosition, getPiece(this->gameState, selectedPosition));
+        setPiece(this->gameState, selectedPosition, 0);
+    }
+}
 
-float CannonBot::getUtility() {}
+bool CannonBot::isGameOver() { return true; }
+
+float CannonBot::getUtility() { return 1.0; }
