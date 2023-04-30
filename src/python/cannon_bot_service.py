@@ -1,12 +1,11 @@
 from ctypes import *
 
-bot_lib = cdll.LoadLibrary('./bin/botlib.so')
-
 class CannonBotService():
   
-    def __init__(self):
-        bot_lib.new_bot.restype = c_void_p
-        self.c_bot_ptr = c_void_p(bot_lib.new_bot())
+    def __init__(self, lib_name):
+        self.bot_lib = cdll.LoadLibrary(lib_name)
+        self.bot_lib.new_bot_cannon.restype = c_void_p
+        self.c_bot_ptr = c_void_p(self.bot_lib.new_bot_cannon())
 
     def convert_game_state_to_int(game_state):
         convertion_dict = {'E':0, 'B':-1, 'W':1, 'Tb':-2, 'Tw':2}
@@ -37,6 +36,6 @@ class CannonBotService():
         # buffer on which the response move will be written
         c_response_move_buffer = create_string_buffer(11)
        
-        bot_lib.find_best_move(self.c_bot_ptr, c_game_state, c_num_rows, c_num_columns, is_black_turn, c_response_move_buffer)
+        self.bot_lib.find_best_move_cannon(self.c_bot_ptr, c_game_state, c_num_rows, c_num_columns, is_black_turn, c_response_move_buffer)
         response_move = c_response_move_buffer.value.decode()
         return response_move
