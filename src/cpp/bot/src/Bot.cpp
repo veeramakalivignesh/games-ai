@@ -5,12 +5,9 @@ Bot::Bot(Game game) {
     this->botImplementation = new CannonBot();
 }
 
+// handle gameover condition
 string Bot::findBestMove(bool isBlackTurn) {
-    string move = "S 4 4 M 4 1";
-    CannonBot* cannonBot = dynamic_cast<CannonBot*> (this->botImplementation);
-    cannonBot->printGame();
-    cout << endl << move << endl << endl;
-    cannonBot->executeMove(move);
-    cannonBot->printGame();
-    return "Heyya";
-}
+    Result idsResult = this->botImplementation->iterativeDeepeningSearch(isBlackTurn);
+    string bestMove = idsResult.strategy[0];
+    return bestMove;
+} 

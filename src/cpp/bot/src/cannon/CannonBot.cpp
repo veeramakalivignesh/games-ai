@@ -284,6 +284,12 @@ void CannonBot::printGame() {
 
 void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }
 
+AbstractBot *CannonBot::clone() {
+    CannonBot *cannonBotCopy = new CannonBot();
+    cannonBotCopy->setGameState(this->gameState);
+    return cannonBotCopy;
+}
+
 vector<string> CannonBot::getValidMoves(bool isBlackTurn) {
     vector<string> validMoves;
 

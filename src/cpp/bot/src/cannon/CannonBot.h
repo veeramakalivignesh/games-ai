@@ -11,6 +11,7 @@ class CannonBot : public AbstractBot {
     void setGameState(vector<vector<int>> gameState);
     void printGame();
 
+    AbstractBot* clone();
     vector<string> getValidMoves(bool isBlackTurn);
     void executeMove(string move);
     bool isGameOver();
