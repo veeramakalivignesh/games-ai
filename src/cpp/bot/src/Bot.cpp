@@ -7,7 +7,7 @@ Bot::Bot(Game game) {
 
 // handle gameover condition
 string Bot::findBestMove(bool isBlackTurn) {
-    Result idsResult = this->botImplementation->iterativeDeepeningSearch(isBlackTurn);
+    Result idsResult = this->botImplementation->iterativeDeepeningSearch(isBlackTurn, 2);
     string bestMove = idsResult.strategy[0];
     return bestMove;
 } 

@@ -19,8 +19,9 @@ class AbstractBot {
     virtual bool isGameOver() = 0;
     virtual float getUtility() = 0;
 
-    Result miniMaxSearch(bool isBlackTurn, int depth, float alpha, float beta, vector<string> prevDepthStrategy);
-    Result iterativeDeepeningSearch(bool isBlackTurn);
+    Result miniMaxSearch(bool isBlackTurn, int depth, float alpha, float beta, vector<string> prevDepthStrategy,
+                         float timeLimit, bool applyTimeLimit);
+    Result iterativeDeepeningSearch(bool isBlackTurn, float timeLimit);
 };
 
 #endif

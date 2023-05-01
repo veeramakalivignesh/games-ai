@@ -1,7 +1,8 @@
 #include "AbstractBot.h"
 
 Result AbstractBot::miniMaxSearch(bool isBlackTurn, int depth, float alpha, float beta,
-                                  vector<string> prevDepthStrategy) {
+                                  vector<string> prevDepthStrategy, float timeLimit, bool applyTimeLimit) {
+    clock_t beginTime = clock();
     Result miniMaxResult;
 
     if (this->isGameOver() || depth == 0) {
@@ -38,8 +39,13 @@ Result AbstractBot::miniMaxSearch(bool isBlackTurn, int depth, float alpha, floa
             childPrevDepthStrategy.erase(childPrevDepthStrategy.begin());
         }
 
-        Result resultForMove =
-            currentBotCopy->miniMaxSearch(!isBlackTurn, depth - 1, childAlpha, childBeta, childPrevDepthStrategy);
+        float childTimeLimit = timeLimit - (float)(clock() - beginTime) / CLOCKS_PER_SEC;
+        if (applyTimeLimit && childTimeLimit < 0) {
+            break;
+        }
+
+        Result resultForMove = currentBotCopy->miniMaxSearch(!isBlackTurn, depth - 1, childAlpha, childBeta,
+                                                             childPrevDepthStrategy, childTimeLimit, false);
         delete currentBotCopy;
 
         if ((isBlackTurn && (resultForMove.payoff < miniMaxResult.payoff)) ||
@@ -56,10 +62,16 @@ Result AbstractBot::miniMaxSearch(bool isBlackTurn, int depth, float alpha, floa
     return miniMaxResult;
 }
 
-Result AbstractBot::iterativeDeepeningSearch(bool isBlackTurn) {
+Result AbstractBot::iterativeDeepeningSearch(bool isBlackTurn, float timeLimit) {
+    clock_t beginTime = clock();
     Result result;
-    for (int i = 1; i <= 5; i++) {
-        result = miniMaxSearch(isBlackTurn, i, -0.12, 10.12, result.strategy);
+    for (int i = 5;; i++) {
+        float timeLeft = timeLimit - (float)(clock() - beginTime) / CLOCKS_PER_SEC;
+        if (timeLeft < 0) {
+            break;
+        }
+        result = miniMaxSearch(isBlackTurn, i, -0.12, 10.12, result.strategy, timeLeft, i > 5);
     }
+    cout << result.strategy.size() << endl;
     return result;
 }
