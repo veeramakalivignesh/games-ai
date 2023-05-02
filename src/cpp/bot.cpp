@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-int ns=8, ms=8;
+int ns = 8, ms = 8;
 
 struct soldier {
     int x, y;
@@ -50,8 +50,7 @@ vector<cannon> if_cannon(soldier sold, vector<vector<int>> &config) {
         col = 1;
     else
         col = -1;
-    if (xc != 0 && xc != ms - 1 && config[xc - 1][yc] == col &&
-        config[xc + 1][yc] == col) {
+    if (xc != 0 && xc != ms - 1 && config[xc - 1][yc] == col && config[xc + 1][yc] == col) {
         temp.x1 = xc - 1;
         temp.y1 = yc;
         temp.x2 = xc + 1;
@@ -59,8 +58,7 @@ vector<cannon> if_cannon(soldier sold, vector<vector<int>> &config) {
         temp.colour = sold.colour;
         ans.push_back(temp);
     }
-    if (yc != 0 && yc != ns - 1 && config[xc][yc - 1] == col &&
-        config[xc][yc + 1] == col) {
+    if (yc != 0 && yc != ns - 1 && config[xc][yc - 1] == col && config[xc][yc + 1] == col) {
         temp.x1 = xc;
         temp.y1 = yc - 1;
         temp.x2 = xc;
@@ -68,8 +66,8 @@ vector<cannon> if_cannon(soldier sold, vector<vector<int>> &config) {
         temp.colour = sold.colour;
         ans.push_back(temp);
     }
-    if (yc != 0 && yc != ns - 1 && xc != 0 && xc != ms - 1 &&
-        config[xc - 1][yc - 1] == col && config[xc + 1][yc + 1] == col) {
+    if (yc != 0 && yc != ns - 1 && xc != 0 && xc != ms - 1 && config[xc - 1][yc - 1] == col &&
+        config[xc + 1][yc + 1] == col) {
         temp.x1 = xc - 1;
         temp.y1 = yc - 1;
         temp.x2 = xc + 1;
@@ -77,8 +75,8 @@ vector<cannon> if_cannon(soldier sold, vector<vector<int>> &config) {
         temp.colour = sold.colour;
         ans.push_back(temp);
     }
-    if (yc != 0 && yc != ns - 1 && xc != 0 && xc != ms - 1 &&
-        config[xc - 1][yc + 1] == col && config[xc + 1][yc - 1] == col) {
+    if (yc != 0 && yc != ns - 1 && xc != 0 && xc != ms - 1 && config[xc - 1][yc + 1] == col &&
+        config[xc + 1][yc - 1] == col) {
         temp.x1 = xc - 1;
         temp.y1 = yc + 1;
         temp.x2 = xc + 1;
@@ -89,8 +87,7 @@ vector<cannon> if_cannon(soldier sold, vector<vector<int>> &config) {
     return ans;
 }
 
-vector<cannon> update_cannons(vector<soldier> solds,
-                              vector<vector<int>> &config) {
+vector<cannon> update_cannons(vector<soldier> solds, vector<vector<int>> &config) {
     vector<cannon> ans, temp;
     int i;
     for (i = 0; i < solds.size(); i++) {
@@ -108,8 +105,7 @@ vector<string> sold_moves(soldier s, vector<vector<int>> &config) {
         col = 1;
     else
         col = -1;
-    if (s.y + col >= 0 && s.y + col <= ns - 1 &&
-        config[s.x][s.y + col] != col) {
+    if (s.y + col >= 0 && s.y + col <= ns - 1 && config[s.x][s.y + col] != col) {
         temp = "S ";
         temp += s.x + 48;
         temp += " ";
@@ -120,8 +116,7 @@ vector<string> sold_moves(soldier s, vector<vector<int>> &config) {
         temp += s.y + 48 + col;
         ans.push_back(temp);
     }
-    if (s.y + col >= 0 && s.y + col <= ns - 1 && s.x < ms - 1 &&
-        config[s.x + 1][s.y + col] != col) {
+    if (s.y + col >= 0 && s.y + col <= ns - 1 && s.x < ms - 1 && config[s.x + 1][s.y + col] != col) {
         temp = "S ";
         temp += s.x + 48;
         temp += " ";
@@ -132,8 +127,7 @@ vector<string> sold_moves(soldier s, vector<vector<int>> &config) {
         temp += s.y + 48 + col;
         ans.push_back(temp);
     }
-    if (s.y + col >= 0 && s.y + col <= ns - 1 && s.x > 0 &&
-        config[s.x - 1][s.y + col] != col) {
+    if (s.y + col >= 0 && s.y + col <= ns - 1 && s.x > 0 && config[s.x - 1][s.y + col] != col) {
         temp = "S ";
         temp += s.x + 48;
         temp += " ";
@@ -144,8 +138,7 @@ vector<string> sold_moves(soldier s, vector<vector<int>> &config) {
         temp += s.y + 48 + col;
         ans.push_back(temp);
     }
-    if (s.x > 0 &&
-        (config[s.x - 1][s.y] == -col || config[s.x - 1][s.y] == -2 * col)) {
+    if (s.x > 0 && (config[s.x - 1][s.y] == -col || config[s.x - 1][s.y] == -2 * col)) {
         temp = "S ";
         temp += s.x + 48;
         temp += " ";
@@ -156,8 +149,7 @@ vector<string> sold_moves(soldier s, vector<vector<int>> &config) {
         temp += s.y + 48;
         ans.push_back(temp);
     }
-    if (s.x < ms - 1 &&
-        (config[s.x + 1][s.y] == -col || config[s.x + 1][s.y] == -2 * col)) {
+    if (s.x < ms - 1 && (config[s.x + 1][s.y] == -col || config[s.x + 1][s.y] == -2 * col)) {
         temp = "S ";
         temp += s.x + 48;
         temp += " ";
@@ -168,16 +160,11 @@ vector<string> sold_moves(soldier s, vector<vector<int>> &config) {
         temp += s.y + 48;
         ans.push_back(temp);
     }
-    if ((s.y + col >= 0 && s.y + col <= ns - 1 &&
-         config[s.x][s.y + col] == -col) ||
-        (s.y + col >= 0 && s.y + col <= ns - 1 && s.x < ms - 1 &&
-         config[s.x + 1][s.y + col] == -col) ||
-        (s.y + col >= 0 && s.y + col <= ns - 1 && s.x > 0 &&
-         config[s.x - 1][s.y + col] == -col) ||
-        (s.x < ms - 1 && config[s.x + 1][s.y] == -col) ||
-        (s.x > 0 && config[s.x - 1][s.y] == -col)) {
-        if (s.y - 2 * col <= ns - 1 && s.y - 2 * col >= 0 &&
-            config[s.x][s.y - 2 * col] != col &&
+    if ((s.y + col >= 0 && s.y + col <= ns - 1 && config[s.x][s.y + col] == -col) ||
+        (s.y + col >= 0 && s.y + col <= ns - 1 && s.x < ms - 1 && config[s.x + 1][s.y + col] == -col) ||
+        (s.y + col >= 0 && s.y + col <= ns - 1 && s.x > 0 && config[s.x - 1][s.y + col] == -col) ||
+        (s.x < ms - 1 && config[s.x + 1][s.y] == -col) || (s.x > 0 && config[s.x - 1][s.y] == -col)) {
+        if (s.y - 2 * col <= ns - 1 && s.y - 2 * col >= 0 && config[s.x][s.y - 2 * col] != col &&
             config[s.x][s.y - 2 * col] != 2 * col) {
             temp = "S ";
             temp += s.x + 48;
@@ -189,8 +176,7 @@ vector<string> sold_moves(soldier s, vector<vector<int>> &config) {
             temp += s.y + 48 - 2 * col;
             ans.push_back(temp);
         }
-        if (s.y - 2 * col <= ns - 1 && s.y - 2 * col >= 0 && s.x <= ms - 3 &&
-            config[s.x + 2][s.y - 2 * col] != col &&
+        if (s.y - 2 * col <= ns - 1 && s.y - 2 * col >= 0 && s.x <= ms - 3 && config[s.x + 2][s.y - 2 * col] != col &&
             config[s.x + 2][s.y - 2 * col] != 2 * col) {
             temp = "S ";
             temp += s.x + 48;
@@ -202,8 +188,7 @@ vector<string> sold_moves(soldier s, vector<vector<int>> &config) {
             temp += s.y + 48 - 2 * col;
             ans.push_back(temp);
         }
-        if (s.y - 2 * col <= ns - 1 && s.y - 2 * col >= 0 && s.x >= 2 &&
-            config[s.x - 2][s.y - 2 * col] != col &&
+        if (s.y - 2 * col <= ns - 1 && s.y - 2 * col >= 0 && s.x >= 2 && config[s.x - 2][s.y - 2 * col] != col &&
             config[s.x - 2][s.y - 2 * col] != 2 * col) {
             temp = "S ";
             temp += s.x + 48;
@@ -231,12 +216,10 @@ vector<string> cannon_moves(cannon c, vector<vector<int>> &config, bool mode) {
     temp += " ";
     temp += c.y1 + 48;
     int hor = c.x2 - c.x1, ver = c.y2 - c.y1;
-    if (c.x2 + hor / 2 < ms && c.x2 + hor / 2 >= 0 && c.y2 + ver / 2 < ns &&
-        c.y2 + ver / 2 >= 0 && config[c.x2 + hor / 2][c.y2 + ver / 2] == 0) {
-        if (c.x2 + hor < ms && c.x2 + hor >= 0 && c.y2 + ver < ns &&
-            c.y2 + ver >= 0 &&
-            (config[c.x2 + hor][c.y2 + ver] == -col ||
-             config[c.x2 + hor][c.y2 + ver] == -2 * col ||
+    if (c.x2 + hor / 2 < ms && c.x2 + hor / 2 >= 0 && c.y2 + ver / 2 < ns && c.y2 + ver / 2 >= 0 &&
+        config[c.x2 + hor / 2][c.y2 + ver / 2] == 0) {
+        if (c.x2 + hor < ms && c.x2 + hor >= 0 && c.y2 + ver < ns && c.y2 + ver >= 0 &&
+            (config[c.x2 + hor][c.y2 + ver] == -col || config[c.x2 + hor][c.y2 + ver] == -2 * col ||
              config[c.x2 + hor][c.y2 + ver] == 0)) {
             temp1 = " B ";
             temp1 += c.x2 + hor + 48;
@@ -259,8 +242,7 @@ vector<string> cannon_moves(cannon c, vector<vector<int>> &config, bool mode) {
                 ans.push_back(temp2);
             }
         }
-        if (c.x2 + 3 * hor / 2 < ms && c.x2 + 3 * hor / 2 >= 0 &&
-            c.y2 + 3 * ver / 2 < ns && c.y2 + 3 * ver / 2 >= 0 &&
+        if (c.x2 + 3 * hor / 2 < ms && c.x2 + 3 * hor / 2 >= 0 && c.y2 + 3 * ver / 2 < ns && c.y2 + 3 * ver / 2 >= 0 &&
             (config[c.x2 + 3 * hor / 2][c.y2 + 3 * ver / 2] == -col ||
              config[c.x2 + 3 * hor / 2][c.y2 + 3 * ver / 2] == -2 * col ||
              config[c.x2 + 3 * hor / 2][c.y2 + 3 * ver / 2] == 0)) {
@@ -286,8 +268,8 @@ vector<string> cannon_moves(cannon c, vector<vector<int>> &config, bool mode) {
             }
         }
     }
-    if (c.x2 + hor / 2 < ms && c.x2 + hor / 2 >= 0 && c.y2 + ver / 2 < ns &&
-        c.y2 + ver / 2 >= 0 && config[c.x2 + hor / 2][c.y2 + ver / 2] == 0) {
+    if (c.x2 + hor / 2 < ms && c.x2 + hor / 2 >= 0 && c.y2 + ver / 2 < ns && c.y2 + ver / 2 >= 0 &&
+        config[c.x2 + hor / 2][c.y2 + ver / 2] == 0) {
         temp1 = " M ";
         temp1 += c.x2 + hor / 2 + 48;
         temp1 += " ";
@@ -295,12 +277,10 @@ vector<string> cannon_moves(cannon c, vector<vector<int>> &config, bool mode) {
         temp1 = temp + temp1;
         ans.push_back(temp1);
     }
-    if (c.x1 - hor / 2 < ms && c.x1 - hor / 2 >= 0 && c.y1 - ver / 2 < ns &&
-        c.y1 - ver / 2 >= 0 && config[c.x1 - hor / 2][c.y1 - ver / 2] == 0) {
-        if (c.x1 - hor < ms && c.x1 - hor >= 0 && c.y1 - ver < ns &&
-            c.y1 - ver >= 0 &&
-            (config[c.x1 - hor][c.y1 - ver] == -col ||
-             config[c.x1 - hor][c.y1 - ver] == -2 * col ||
+    if (c.x1 - hor / 2 < ms && c.x1 - hor / 2 >= 0 && c.y1 - ver / 2 < ns && c.y1 - ver / 2 >= 0 &&
+        config[c.x1 - hor / 2][c.y1 - ver / 2] == 0) {
+        if (c.x1 - hor < ms && c.x1 - hor >= 0 && c.y1 - ver < ns && c.y1 - ver >= 0 &&
+            (config[c.x1 - hor][c.y1 - ver] == -col || config[c.x1 - hor][c.y1 - ver] == -2 * col ||
              config[c.x1 - hor][c.y1 - ver] == 0)) {
             temp1 = " B ";
             temp1 += c.x1 - hor + 48;
@@ -323,8 +303,7 @@ vector<string> cannon_moves(cannon c, vector<vector<int>> &config, bool mode) {
                 ans.push_back(temp2);
             }
         }
-        if (c.x1 - 3 * hor / 2 < ms && c.x1 - 3 * hor / 2 >= 0 &&
-            c.y1 - 3 * ver / 2 < ns && c.y1 - 3 * ver / 2 >= 0 &&
+        if (c.x1 - 3 * hor / 2 < ms && c.x1 - 3 * hor / 2 >= 0 && c.y1 - 3 * ver / 2 < ns && c.y1 - 3 * ver / 2 >= 0 &&
             (config[c.x1 - 3 * hor / 2][c.y1 - 3 * ver / 2] == -col ||
              config[c.x1 - 3 * hor / 2][c.y1 - 3 * ver / 2] == -2 * col ||
              config[c.x1 - 3 * hor / 2][c.y1 - 3 * ver / 2] == 0)) {
@@ -350,8 +329,8 @@ vector<string> cannon_moves(cannon c, vector<vector<int>> &config, bool mode) {
             }
         }
     }
-    if (c.x1 - hor / 2 < ms && c.x1 - hor / 2 >= 0 && c.y1 - ver / 2 < ns &&
-        c.y1 - ver / 2 >= 0 && config[c.x1 - hor / 2][c.y1 - ver / 2] == 0) {
+    if (c.x1 - hor / 2 < ms && c.x1 - hor / 2 >= 0 && c.y1 - ver / 2 < ns && c.y1 - ver / 2 >= 0 &&
+        config[c.x1 - hor / 2][c.y1 - ver / 2] == 0) {
         temp1 = "S ";
         temp1 += c.x2 + 48;
         temp1 += " ";
@@ -422,7 +401,7 @@ class board {
                     temps.y = j;
                     temps.colour = 1;
                     whites.push_back(temps);
-                } else if(config[i][j] == -1) {
+                } else if (config[i][j] == -1) {
                     temps.x = i;
                     temps.y = j;
                     temps.colour = 0;
@@ -488,19 +467,15 @@ class board {
             config[move[2] - 48][move[4] - 48] = 0;
             if (player) {
                 for (i = 0; i < whites.size(); i++) {
-                    if (whites[i].x == move[2] - 48 &&
-                        whites[i].y == move[4] - 48) {
+                    if (whites[i].x == move[2] - 48 && whites[i].y == move[4] - 48) {
                         whites[i].x = move[8] - 48;
                         whites[i].y = move[10] - 48;
                         break;
                     }
                 }
                 {
-                    for (i = 0; i < blacks.size() &&
-                                config[move[8] - 48][move[10] - 48] == -1;
-                         i++)
-                        if (blacks[i].x == move[8] - 48 &&
-                            blacks[i].y == move[10] - 48) {
+                    for (i = 0; i < blacks.size() && config[move[8] - 48][move[10] - 48] == -1; i++)
+                        if (blacks[i].x == move[8] - 48 && blacks[i].y == move[10] - 48) {
                             blacks.erase(blacks.begin() + i);
                             break;
                         }
@@ -510,18 +485,14 @@ class board {
                 blackc = update_cannons(blacks, config);
             } else {
                 for (i = 0; i < blacks.size(); i++) {
-                    if (blacks[i].x == move[2] - 48 &&
-                        blacks[i].y == move[4] - 48) {
+                    if (blacks[i].x == move[2] - 48 && blacks[i].y == move[4] - 48) {
                         blacks[i].x = move[8] - 48;
                         blacks[i].y = move[10] - 48;
                         break;
                     }
                 }
-                for (i = 0; i < whites.size() &&
-                            config[move[8] - 48][move[10] - 48] == 1;
-                     i++) {
-                    if (whites[i].x == move[8] - 48 &&
-                        whites[i].y == move[10] - 48) {
+                for (i = 0; i < whites.size() && config[move[8] - 48][move[10] - 48] == 1; i++) {
+                    if (whites[i].x == move[8] - 48 && whites[i].y == move[10] - 48) {
                         whites.erase(whites.begin() + i);
                         break;
                     }
@@ -534,11 +505,8 @@ class board {
 
         if (move[6] == 'B') {
             if (player) {
-                for (i = 0; i < blacks.size() &&
-                            config[move[8] - 48][move[10] - 48] == -1;
-                     i++) {
-                    if (blacks[i].x == move[8] - 48 &&
-                        blacks[i].y == move[10] - 48) {
+                for (i = 0; i < blacks.size() && config[move[8] - 48][move[10] - 48] == -1; i++) {
+                    if (blacks[i].x == move[8] - 48 && blacks[i].y == move[10] - 48) {
                         blacks.erase(blacks.begin() + i);
                         break;
                     }
@@ -546,11 +514,8 @@ class board {
                 config[move[8] - 48][move[10] - 48] = 0;
                 blackc = update_cannons(blacks, config);
             } else {
-                for (i = 0; i < whites.size() &&
-                            config[move[8] - 48][move[10] - 48] == 1;
-                     i++) {
-                    if (whites[i].x == move[8] - 48 &&
-                        whites[i].y == move[10] - 48) {
+                for (i = 0; i < whites.size() && config[move[8] - 48][move[10] - 48] == 1; i++) {
+                    if (whites[i].x == move[8] - 48 && whites[i].y == move[10] - 48) {
                         whites.erase(whites.begin() + i);
                         break;
                     }
@@ -562,8 +527,7 @@ class board {
 
         for (i = 0; i < (ms / 2); i++) {
             if (move[8] - 48 == 2 * i && move[10] - 48 == 0) wtown[i] = 0;
-            if (move[8] - 48 == 2 * i + 1 && move[10] - 48 == ns - 1)
-                btown[i] = 0;
+            if (move[8] - 48 == 2 * i + 1 && move[10] - 48 == ns - 1) btown[i] = 0;
         }
         player = !player;
         return true;
@@ -620,10 +584,8 @@ class board {
         int dc;
         for (i = 0, dc = 0; i < a; i++) {
             if (whitec[i].x1 != whitec[i].x2 && whitec[i].y1 != whitec[i].y2) {
-                if ((whitec[i].x1 == 0 && whitec[i].y2 == 0) ||
-                    (whitec[i].x2 == 0 && whitec[i].y1 == 0) ||
-                    (whitec[i].x1 == ms - 1 && whitec[i].y2 == 0) ||
-                    (whitec[i].x2 == ms - 1 && whitec[i].y1 == 0))
+                if ((whitec[i].x1 == 0 && whitec[i].y2 == 0) || (whitec[i].x2 == 0 && whitec[i].y1 == 0) ||
+                    (whitec[i].x1 == ms - 1 && whitec[i].y2 == 0) || (whitec[i].x2 == ms - 1 && whitec[i].y1 == 0))
                     dc--;
                 else
                     dc++;
@@ -631,8 +593,7 @@ class board {
         }
         for (i = 0; i < bc; i++) {
             if (blackc[i].x1 != blackc[i].x2 && blackc[i].y1 != blackc[i].y2) {
-                if ((blackc[i].x1 == 0 && blackc[i].y2 == ns - 1) ||
-                    (blackc[i].x2 == 0 && blackc[i].y1 == ns - 1) ||
+                if ((blackc[i].x1 == 0 && blackc[i].y2 == ns - 1) || (blackc[i].x2 == 0 && blackc[i].y1 == ns - 1) ||
                     (blackc[i].x1 == ms - 1 && blackc[i].y2 == ns - 1) ||
                     (blackc[i].x2 == ms - 1 && blackc[i].y1 == ns - 1))
                     dc++;
@@ -656,9 +617,8 @@ class board {
         return ans;
     }
 
-    result best_move(int look, float alpha, float beta, float t, bool f,
-                     vector<string> killer, bool kill, vector<vector<int>> tcon,
-                     bool stag) {
+    result best_move(int look, float alpha, float beta, float t, bool f, vector<string> killer, bool kill,
+                     vector<vector<int>> tcon, bool stag) {
         // //cerr << ns << " " << ms << endl;
         clock_t starttime = clock();
         board state = *this;
@@ -696,8 +656,7 @@ class board {
                 n++;
             }
             for (i = 0, temp.payoff = alpha; i < n; i++) {
-                if (f == 1 &&
-                    ((float)(clock() - starttime) / CLOCKS_PER_SEC >= t)) {
+                if (f == 1 && ((float)(clock() - starttime) / CLOCKS_PER_SEC >= t)) {
                     y = temp.plan;
                     y.insert(y.begin(), temps);
                     ans.payoff = temp.payoff;
@@ -705,17 +664,13 @@ class board {
                     // cerr <<"pls" <<y.size() << endl;
                     return ans;
                 }
-                if ((i == 0 || actions[i] != actions[0]) &&
-                    state.make_move(actions[i])) {
+                if ((i == 0 || actions[i] != actions[0]) && state.make_move(actions[i])) {
                     if (!stag || !same(state.config, tcon)) {
-                        result x = state.best_move(
-                            look - 1, temp.payoff, beta,
-                            t - (float)(clock() - starttime) / CLOCKS_PER_SEC,
-                            0, killer, i == 0 && kill, tcon, 0);
-                        if (temp.payoff < x.payoff ||
-                            (temp.payoff == x.payoff && actions[i][6] == 'B' &&
-                             config[actions[i][8] - 48][actions[i][10] - 48] >
-                                 0)) {
+                        result x = state.best_move(look - 1, temp.payoff, beta,
+                                                   t - (float)(clock() - starttime) / CLOCKS_PER_SEC, 0, killer,
+                                                   i == 0 && kill, tcon, 0);
+                        if (temp.payoff < x.payoff || (temp.payoff == x.payoff && actions[i][6] == 'B' &&
+                                                       config[actions[i][8] - 48][actions[i][10] - 48] > 0)) {
                             temp = x;
                             temps = actions[i];
                             if (temp.payoff >= beta) break;
@@ -736,8 +691,7 @@ class board {
                 n++;
             }
             for (i = 0, temp.payoff = beta; i < n; i++) {
-                if (f == 1 &&
-                    ((float)(clock() - starttime) / CLOCKS_PER_SEC >= t)) {
+                if (f == 1 && ((float)(clock() - starttime) / CLOCKS_PER_SEC >= t)) {
                     y = temp.plan;
                     y.insert(y.begin(), temps);
                     ans.payoff = temp.payoff;
@@ -745,17 +699,13 @@ class board {
                     // cerr <<"wtf" <<y.size() << endl;
                     return ans;
                 }
-                if ((i == 0 || actions[i] != actions[0]) &&
-                    state.make_move(actions[i])) {
+                if ((i == 0 || actions[i] != actions[0]) && state.make_move(actions[i])) {
                     if (!stag || !same(state.config, tcon)) {
-                        result x = state.best_move(
-                            look - 1, alpha, temp.payoff,
-                            t - (float)(clock() - starttime) / CLOCKS_PER_SEC,
-                            0, killer, i == 0 && kill, tcon, 0);
-                        if (temp.payoff > x.payoff ||
-                            (temp.payoff == x.payoff && actions[i][6] == 'B' &&
-                             config[actions[i][8] - 48][actions[i][10] - 48] <
-                                 0)) {
+                        result x = state.best_move(look - 1, alpha, temp.payoff,
+                                                   t - (float)(clock() - starttime) / CLOCKS_PER_SEC, 0, killer,
+                                                   i == 0 && kill, tcon, 0);
+                        if (temp.payoff > x.payoff || (temp.payoff == x.payoff && actions[i][6] == 'B' &&
+                                                       config[actions[i][8] - 48][actions[i][10] - 48] < 0)) {
                             temp = x;
                             temps = actions[i];
                             if (temp.payoff <= alpha) break;
@@ -775,7 +725,7 @@ class board {
     }
 
     // time logic need to be tested
-    result idd( vector<vector<int>> tcon, bool stag) {
+    result idd(vector<vector<int>> tcon, bool stag) {
         // cerr << "idd start" << "\n";
         clock_t starttime = clock();
         result ans, x, temp_ans;
@@ -810,13 +760,11 @@ class board {
                 break;
             }
             if (i == j) {
-                x = best_move(i, -0.12, 10.12, t - temp, 0, killer, 0, tcon,
-                              stag);
+                x = best_move(i, -0.12, 10.12, t - temp, 0, killer, 0, tcon, stag);
                 killer = x.plan;
                 // cerr << i << " " << x.payoff << endl;
             } else {
-                x = best_move(i, -0.12, 10.12, t - temp, 1, killer, 1, tcon,
-                              stag);
+                x = best_move(i, -0.12, 10.12, t - temp, 1, killer, 1, tcon, stag);
                 // cerr << i << " " << x.payoff << endl;
             }
             if (player) {
@@ -873,20 +821,21 @@ string invertMove(string move) {
 
 // interface with c to be used as a python library
 extern "C" {
-    void *new_bot_cannon() { return new Bot(); }
+void *new_bot_cannon() { return new Bot(); }
 
-    void find_best_move_cannon(Bot *bot, int **gameStateArr, int numRows, int numColumns, bool isBlackTurn, char *responseMoveBuffer) {
-        // create c++ vector from array
-        vector<vector<int>> gameState;
-        for(int i=0; i<numColumns; i++) {
-            vector<int> column;
-            for(int j=0; j<numRows; j++) {
-                column.push_back(gameStateArr[j][i]);
-            }
-            gameState.push_back(column);
+void find_best_move_cannon(Bot *bot, int **gameStateArr, int numRows, int numColumns, bool isBlackTurn,
+                           char *responseMoveBuffer) {
+    // create c++ vector from array
+    vector<vector<int>> gameState;
+    for (int i = 0; i < numColumns; i++) {
+        vector<int> column;
+        for (int j = 0; j < numRows; j++) {
+            column.push_back(gameStateArr[j][i]);
         }
-
-        string responseMove = invertMove(bot->find_best_move(gameState, !isBlackTurn));
-        strcpy(responseMoveBuffer, responseMove.c_str());
+        gameState.push_back(column);
     }
+
+    string responseMove = invertMove(bot->find_best_move(gameState, !isBlackTurn));
+    strcpy(responseMoveBuffer, responseMove.c_str());
+}
 }
