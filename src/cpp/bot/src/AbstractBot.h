@@ -5,23 +5,71 @@
 #include <vector>
 using namespace std;
 
-struct Result {
+/**
+ * This struct definies the result of minimax search
+ * @param strategy optimal path found in the search tree
+ * @param payOff utility function value of that path
+ */
+struct MiniMaxResult {
     vector<string> strategy;
-    float payoff;
+    float payOff;
 };
 
+/**
+ * This is an abstract class that defines the function templates for the
+ * game-specific bot implementation. Game independent logics are implemented here
+ *
+ * @author veeramakali vignesh
+ */
 class AbstractBot {
   public:
     virtual ~AbstractBot() = default;
+
+    /**
+     * Creates a copy of the object instance
+     * @return Pointer to the instance
+     */
     virtual AbstractBot* clone() = 0;
+
+    /**
+     * Calculates the list of valid moves for the current gameState and player turn
+     * @param isBlackTurn
+     */
     virtual vector<string> getValidMoves(bool isBlackTurn) = 0;
+
+    /**
+     * Executes the move and modifies the gameState accordingly
+     * @param move
+     */
     virtual void executeMove(string move) = 0;
+
+    /**
+     * Checks if the game is over for the current gameState
+     */
     virtual bool isGameOver() = 0;
+
+    /**
+     * Calculates the utility funtion value for the current gameState
+     */
     virtual float getUtility() = 0;
 
-    Result miniMaxSearch(bool isBlackTurn, int depth, float alpha, float beta, vector<string> prevDepthStrategy,
-                         float timeLimit, bool applyTimeLimit);
-    Result iterativeDeepeningSearch(bool isBlackTurn, float timeLimit);
+    /**
+     * Performs the minimax search from the current gameState
+     * @param isBlackTurn current player
+     * @param depth depth of the search tree
+     * @param alpha lower limit of the utility value in alpha-beta pruning
+     * @param beta upper limit of the utility value in alpha-beta pruning
+     * @param prevDepthStrategy strategy calculated in the previous depth search in IDS
+     * @param timeLimit value to limit the execution time of the search
+     * @param applyTimeLimit says if time limit should be applied
+     */
+    MiniMaxResult miniMaxSearch(bool isBlackTurn, int depth, float alpha, float beta, vector<string> prevDepthStrategy,
+                                float timeLimit, bool applyTimeLimit);
+
+    /**
+     * Performs the above minimax search with incremental depth untill the given time limit is exceeded
+     */
+    MiniMaxResult iterativeDeepeningSearch(bool isBlackTurn, float timeLimit);
 };
 
 #endif

@@ -25,7 +25,7 @@ Position getPositionProductWithScalar(float scalar, Position position) {
 
 bool isPositionValid(vector<vector<int>> &gameState, Position &position) {
     int numRows = gameState.size();
-    int numColumns = numRows>0 ? gameState[0].size() : 0;
+    int numColumns = numRows > 0 ? gameState[0].size() : 0;
     return position.i >= 0 && position.i < numRows && position.j >= 0 && position.j < numColumns;
 }
 
@@ -266,7 +266,7 @@ bool isCannonDiagonal(Cannon &cannon) {
     return (cannon.rearEnd.i != cannon.frontEnd.i) && (cannon.rearEnd.j != cannon.frontEnd.j);
 }
 
-//************//
+/******************** Implementation of class functions ********************/
 
 void CannonBot::printGame() {
     int i, j;
