@@ -2,12 +2,18 @@
 #include "./cannon/CannonBot.h"
 
 Bot::Bot(Game game) {
-    this->botImplementation = new CannonBot();
+    if (game == Cannon) {
+        this->botImplementation = new CannonBot();
+    }
 }
 
-// handle gameover condition
 string Bot::findBestMove(bool isBlackTurn) {
-    Result idsResult = this->botImplementation->iterativeDeepeningSearch(isBlackTurn, 2);
-    string bestMove = idsResult.strategy[0];
-    return bestMove;
-} 
+    // giving a time limit of 2 seconds
+    MiniMaxResult idsResult = this->botImplementation->iterativeDeepeningSearch(isBlackTurn, 2);
+    if (!idsResult.strategy.empty()) {
+        cout << idsResult.strategy.size() << endl;
+        return idsResult.strategy[0];
+    } else {
+        return "GAME OVER";
+    }
+}

@@ -1,8 +1,8 @@
 mkdir -p bin
 
-echo "compiling bot0 lib"
-g++ -c -fPIC -std=c++11 -O3 -o ./bin/bot0.o src/cpp/bot.cpp 
-g++ -shared -Wl,-install_name,./bin/bot0lib.so -o ./bin/bot0lib.so ./bin/bot0.o
+# echo "compiling bot_old lib"
+# g++ -c -fPIC -std=c++11 -O3 -o ./bin/bot_old.o src/cpp/bot_old.cpp 
+# g++ -shared -Wl,-install_name,./bin/botlib_old.so -o ./bin/botlib_old.so ./bin/bot_old.o
 
 echo "compiling bot lib"
 g++ -c -fPIC -std=c++11 -O3 -o ./bin/bot.o src/cpp/bot/src/Bot.cpp 

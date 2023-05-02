@@ -25,7 +25,7 @@ Position getPositionProductWithScalar(float scalar, Position position) {
 
 bool isPositionValid(vector<vector<int>> &gameState, Position &position) {
     int numRows = gameState.size();
-    int numColumns = numRows>0 ? gameState[0].size() : 0;
+    int numColumns = numRows > 0 ? gameState[0].size() : 0;
     return position.i >= 0 && position.i < numRows && position.j >= 0 && position.j < numColumns;
 }
 
@@ -266,12 +266,20 @@ bool isCannonDiagonal(Cannon &cannon) {
     return (cannon.rearEnd.i != cannon.frontEnd.i) && (cannon.rearEnd.j != cannon.frontEnd.j);
 }
 
-//************//
+/******************** Implementation of class functions ********************/
+
+CannonBot::CannonBot() {
+    this->setMinUtility(-1.0);
+    this->setMaxUtility(11.0);
+    this->setInitialDepthForIDS(5);
+}
+
+void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }
 
 void CannonBot::printGame() {
     int i, j;
-    for (i = 0; i < 8; i++) {
-        for (j = 0; j < 8; j++) {
+    for (i = 0; i < this->gameState.size(); i++) {
+        for (j = 0; j < this->gameState[i].size(); j++) {
             if (this->gameState[i][j] == 2) cout << "T ";
             if (this->gameState[i][j] == 1) cout << "W ";
             if (this->gameState[i][j] == 0) cout << "0 ";
@@ -281,8 +289,6 @@ void CannonBot::printGame() {
         cout << endl;
     }
 }
-
-void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }
 
 AbstractBot *CannonBot::clone() {
     CannonBot *cannonBotCopy = new CannonBot();
