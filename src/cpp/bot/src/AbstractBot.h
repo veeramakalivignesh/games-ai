@@ -22,6 +22,17 @@ struct MiniMaxResult {
  * @author veeramakali vignesh
  */
 class AbstractBot {
+  private:
+    // These values are game dependent and needs to be set in the respective constructor
+    float minUtility;
+    float maxUtility;
+    int initialDepthForIDS;
+
+  protected:
+    void setMinUtility(float minUtility);
+    void setMaxUtility(float maxUtility);
+    void setInitialDepthForIDS(int initialDepthForIDS);
+
   public:
     virtual ~AbstractBot() = default;
 

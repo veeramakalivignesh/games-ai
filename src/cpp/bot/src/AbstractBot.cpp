@@ -1,5 +1,17 @@
 #include "AbstractBot.h"
 
+void AbstractBot::setMinUtility(float minUtility) {
+    this->minUtility = minUtility;
+}
+
+void AbstractBot::setMaxUtility(float maxUtility) {
+    this->maxUtility = maxUtility;
+}
+
+void AbstractBot::setInitialDepthForIDS(int initialDepthForIDS) {
+    this->initialDepthForIDS = initialDepthForIDS;
+}
+
 MiniMaxResult AbstractBot::miniMaxSearch(bool isBlackTurn, int depth, float alpha, float beta,
                                          vector<string> prevDepthStrategy, float timeLimit, bool applyTimeLimit) {
     clock_t beginTime = clock();
@@ -82,15 +94,15 @@ MiniMaxResult AbstractBot::iterativeDeepeningSearch(bool isBlackTurn, float time
     clock_t beginTime = clock();
     MiniMaxResult idsResult;
 
-    for (int depth = 5;; depth++) {
+    for (int depth = this->initialDepthForIDS;; depth++) {
         float timeLeft = timeLimit - (float)(clock() - beginTime) / CLOCKS_PER_SEC;
         if (timeLeft < 0) {
             break;
         }
         // not applying time limit for the initial depth to avoid bad moves due to incomplete search
-        bool applyTimeLimit = depth > 5;
-        MiniMaxResult resultForDepth =
-            miniMaxSearch(isBlackTurn, depth, -0.12, 10.12, idsResult.strategy, timeLeft, applyTimeLimit);
+        bool applyTimeLimit = depth > this->initialDepthForIDS;
+        MiniMaxResult resultForDepth = miniMaxSearch(isBlackTurn, depth, this->minUtility, this->maxUtility,
+                                                     idsResult.strategy, timeLeft, applyTimeLimit);
 
         /**
          * Checking for result validity. It will be empty when the timelimit

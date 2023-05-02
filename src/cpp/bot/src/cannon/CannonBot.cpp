@@ -268,10 +268,18 @@ bool isCannonDiagonal(Cannon &cannon) {
 
 /******************** Implementation of class functions ********************/
 
+CannonBot::CannonBot() {
+    this->setMinUtility(-1.0);
+    this->setMaxUtility(11.0);
+    this->setInitialDepthForIDS(5);
+}
+
+void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }
+
 void CannonBot::printGame() {
     int i, j;
-    for (i = 0; i < 8; i++) {
-        for (j = 0; j < 8; j++) {
+    for (i = 0; i < this->gameState.size(); i++) {
+        for (j = 0; j < this->gameState[i].size(); j++) {
             if (this->gameState[i][j] == 2) cout << "T ";
             if (this->gameState[i][j] == 1) cout << "W ";
             if (this->gameState[i][j] == 0) cout << "0 ";
@@ -281,8 +289,6 @@ void CannonBot::printGame() {
         cout << endl;
     }
 }
-
-void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }
 
 AbstractBot *CannonBot::clone() {
     CannonBot *cannonBotCopy = new CannonBot();

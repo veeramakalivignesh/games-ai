@@ -821,21 +821,21 @@ string invertMove(string move) {
 
 // interface with c to be used as a python library
 extern "C" {
-void *new_bot_cannon() { return new Bot(); }
+    void *new_bot_cannon() { return new Bot(); }
 
-void find_best_move_cannon(Bot *bot, int **gameStateArr, int numRows, int numColumns, bool isBlackTurn,
-                           char *responseMoveBuffer) {
-    // create c++ vector from array
-    vector<vector<int>> gameState;
-    for (int i = 0; i < numColumns; i++) {
-        vector<int> column;
-        for (int j = 0; j < numRows; j++) {
-            column.push_back(gameStateArr[j][i]);
+    void find_best_move_cannon(Bot * bot, int **gameStateArr, int numRows, int numColumns, bool isBlackTurn,
+                               char *responseMoveBuffer) {
+        // create c++ vector from array
+        vector<vector<int>> gameState;
+        for (int i = 0; i < numColumns; i++) {
+            vector<int> column;
+            for (int j = 0; j < numRows; j++) {
+                column.push_back(gameStateArr[j][i]);
+            }
+            gameState.push_back(column);
         }
-        gameState.push_back(column);
-    }
 
-    string responseMove = invertMove(bot->find_best_move(gameState, !isBlackTurn));
-    strcpy(responseMoveBuffer, responseMove.c_str());
-}
+        string responseMove = invertMove(bot->find_best_move(gameState, !isBlackTurn));
+        strcpy(responseMoveBuffer, responseMove.c_str());
+    }
 }

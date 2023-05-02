@@ -13,6 +13,7 @@ class CannonBot : public AbstractBot {
     vector<vector<int>> gameState;
 
   public:
+    CannonBot();
     void setGameState(vector<vector<int>> gameState);
     void printGame();
 
