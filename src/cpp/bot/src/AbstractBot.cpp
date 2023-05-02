@@ -65,12 +65,15 @@ Result AbstractBot::miniMaxSearch(bool isBlackTurn, int depth, float alpha, floa
 Result AbstractBot::iterativeDeepeningSearch(bool isBlackTurn, float timeLimit) {
     clock_t beginTime = clock();
     Result result;
-    for (int i = 5;; i++) {
+    for (int depth = 5;; depth++) {
         float timeLeft = timeLimit - (float)(clock() - beginTime) / CLOCKS_PER_SEC;
         if (timeLeft < 0) {
             break;
         }
-        result = miniMaxSearch(isBlackTurn, i, -0.12, 10.12, result.strategy, timeLeft, i > 5);
+        Result resultForDepth = miniMaxSearch(isBlackTurn, depth, -0.12, 10.12, result.strategy, timeLeft, depth > 5);
+        if (!resultForDepth.strategy.empty()) {
+            result = resultForDepth;
+        }
     }
     cout << result.strategy.size() << endl;
     return result;
