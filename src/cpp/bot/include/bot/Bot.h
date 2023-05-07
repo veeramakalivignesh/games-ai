@@ -20,8 +20,8 @@ class Bot {
 extern "C" {
     void *new_bot_cannon() { return new Bot(Cannon); }
 
-    void find_best_move_cannon(Bot * bot, int **gameStateArr, int numRows, int numColumns, int ***forbiddenStatesArr, int numForbiddenStates,
-                               bool isBlackTurn, char *responseMoveBuffer) {
+    void find_best_move_cannon(Bot * bot, int **gameStateArr, int numRows, int numColumns, int ***forbiddenStatesArr,
+                               int numForbiddenStates, bool isBlackTurn, char *responseMoveBuffer) {
         // create c++ vector from array
         vector<vector<int>> gameState;
         for (int i = 0; i < numRows; i++) {
@@ -48,8 +48,6 @@ extern "C" {
         CannonBot *cannonBot = dynamic_cast<CannonBot *>(bot->botImplementation);
         cannonBot->setGameState(gameState);
         cannonBot->setForbiddenStates(forbiddenStates);
-
-        cannonBot->printForbiddenStates();
 
         string responseMove = bot->findBestMove(isBlackTurn);
         strcpy(responseMoveBuffer, responseMove.c_str());

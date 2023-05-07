@@ -46,7 +46,8 @@ MiniMaxResult AbstractBot::miniMaxSearch(bool isBlackTurn, int depth, float alph
     for (string move : validMoves) {
         AbstractBot* currentBotCopy = this->clone();
         currentBotCopy->executeMove(move);
-
+        
+        // skip forbidden moves to avoid stagnant game conditions
         if(currentBotCopy->isCurrentStateForbidden()) {
             continue;
         }

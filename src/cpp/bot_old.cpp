@@ -823,8 +823,8 @@ string invertMove(string move) {
 extern "C" {
     void *new_bot_cannon() { return new Bot(); }
 
-    void find_best_move_cannon(Bot * bot, int **gameStateArr, int numRows, int numColumns, bool isBlackTurn,
-                               char *responseMoveBuffer) {
+    void find_best_move_cannon(Bot * bot, int **gameStateArr, int numRows, int numColumns, int ***forbiddenStatesArr,
+                               int numForbiddenStates, bool isBlackTurn, char *responseMoveBuffer) {
         // create c++ vector from array
         vector<vector<int>> gameState;
         for (int i = 0; i < numColumns; i++) {

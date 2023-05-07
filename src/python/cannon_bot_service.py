@@ -17,7 +17,6 @@ class CannonBotService():
             int_game_state.append(int_row)
         return int_game_state
   
-    # TODO check 2d list
     def convert_list_to_cint_array_2d (list_2d):
         c_array = (POINTER(c_int) * len(list_2d))()
         i = 0
