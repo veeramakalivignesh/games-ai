@@ -44,15 +44,13 @@ MiniMaxResult AbstractBot::miniMaxSearch(bool isBlackTurn, int depth, float alph
 
     miniMaxResult.payOff = isBlackTurn ? beta : alpha;
     for (string move : validMoves) {
-        AbstractBot* currentBotCopy = this->clone();
+        AbstractBot* currentBotCopy = this->cloneGameState();
         currentBotCopy->executeMove(move);
         
         // skip forbidden moves to avoid stagnant game conditions
-        if(currentBotCopy->isCurrentStateForbidden()) {
+        if(this->isBotInForbiddenState(currentBotCopy)) {
             continue;
         }
-        // not checking for forbidden states for further levels
-        currentBotCopy->clearForbiddenStates();
 
         float childAlpha = isBlackTurn ? alpha : miniMaxResult.payOff;
         float childBeta = isBlackTurn ? miniMaxResult.payOff : beta;

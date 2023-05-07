@@ -21,13 +21,12 @@ class CannonBot : public AbstractBot {
     void printForbiddenStates();
 
     // implementations of pure virual functions defined in AbstractBot
-    AbstractBot* clone();
+    AbstractBot* cloneGameState();
     vector<string> getValidMoves(bool isBlackTurn);
     void executeMove(string move);
     bool isGameOver();
     float getUtility();
-    bool isCurrentStateForbidden();
-    void clearForbiddenStates();
+    bool isBotInForbiddenState(AbstractBot* abstractBot);
 };
 
 #endif

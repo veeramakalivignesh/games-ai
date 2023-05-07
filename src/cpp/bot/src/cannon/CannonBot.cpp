@@ -266,7 +266,7 @@ bool isCannonDiagonal(Cannon &cannon) {
     return (cannon.rearEnd.i != cannon.frontEnd.i) && (cannon.rearEnd.j != cannon.frontEnd.j);
 }
 
-bool areStatesEqual(vector<vector<int>> state1, vector<vector<int>> state2) {
+bool areStatesEqual(vector<vector<int>> &state1, vector<vector<int>> &state2) {
     if (state1.size() != state2.size()) {
         return false;
     }
@@ -326,10 +326,9 @@ void CannonBot::printForbiddenStates() {
     }
 }
 
-AbstractBot *CannonBot::clone() {
+AbstractBot *CannonBot::cloneGameState() {
     CannonBot *cannonBotCopy = new CannonBot();
     cannonBotCopy->setGameState(this->gameState);
-    cannonBotCopy->setForbiddenStates(this->forbiddenStates);
     return cannonBotCopy;
 }
 
@@ -469,15 +468,12 @@ float CannonBot::getUtility() {
     return utility;
 }
 
-bool CannonBot::isCurrentStateForbidden() {
+bool CannonBot::isBotInForbiddenState(AbstractBot *abstractBot) {
+    CannonBot *cannonBot = dynamic_cast<CannonBot *>(abstractBot);
     for (vector<vector<int>> forbiddenState : this->forbiddenStates) {
-        if (areStatesEqual(this->gameState, forbiddenState)) {
+        if (areStatesEqual(cannonBot->gameState, forbiddenState)) {
             return true;
         }
     }
     return false;
-}
-
-void CannonBot::clearForbiddenStates() {
-    this->forbiddenStates.clear();
 }

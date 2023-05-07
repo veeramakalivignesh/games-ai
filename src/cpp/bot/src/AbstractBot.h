@@ -37,10 +37,10 @@ class AbstractBot {
     virtual ~AbstractBot() = default;
 
     /**
-     * Creates a copy of the object instance
+     * Creates a new object instance with the same gameState
      * @return Pointer to the instance
      */
-    virtual AbstractBot* clone() = 0;
+    virtual AbstractBot* cloneGameState() = 0;
 
     /**
      * Calculates the list of valid moves for the current gameState and player turn
@@ -65,14 +65,9 @@ class AbstractBot {
     virtual float getUtility() = 0;
 
     /**
-     * Checks if the current state is forbidden to avoid stagnant game conditions
+     * Checks if the parameter bot gameState is forbidden to avoid stagnant game conditions
      */
-    virtual bool isCurrentStateForbidden() = 0;
-
-    /**
-     * Clears all forbidden states if they exist
-    */
-    virtual void clearForbiddenStates() = 0;
+    virtual bool isBotInForbiddenState(AbstractBot* abstractBot) = 0;
 
     /**
      * Performs the minimax search from the current gameState
