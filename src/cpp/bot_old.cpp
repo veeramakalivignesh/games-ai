@@ -835,6 +835,9 @@ extern "C" {
             gameState.push_back(column);
         }
 
+        ns = numRows;
+        ms = numColumns;
+
         string responseMove = invertMove(bot->find_best_move(gameState, !isBlackTurn));
         strcpy(responseMoveBuffer, responseMove.c_str());
     }

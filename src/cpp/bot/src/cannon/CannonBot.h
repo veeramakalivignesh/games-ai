@@ -11,11 +11,14 @@
 class CannonBot : public AbstractBot {
   private:
     vector<vector<int>> gameState;
+    vector<vector<vector<int>>> forbiddenStates;
 
   public:
     CannonBot();
     void setGameState(vector<vector<int>> gameState);
+    void setForbiddenStates(vector<vector<vector<int>>> forbiddenStates);
     void printGame();
+    void printForbiddenStates();
 
     // implementations of pure virual functions defined in AbstractBot
     AbstractBot* clone();
@@ -23,6 +26,8 @@ class CannonBot : public AbstractBot {
     void executeMove(string move);
     bool isGameOver();
     float getUtility();
+    bool isCurrentStateForbidden();
+    void clearForbiddenStates();
 };
 
 #endif

@@ -65,6 +65,16 @@ class AbstractBot {
     virtual float getUtility() = 0;
 
     /**
+     * Checks if the current state is forbidden to avoid stagnant game conditions
+     */
+    virtual bool isCurrentStateForbidden() = 0;
+
+    /**
+     * Clears all forbidden states if they exist
+    */
+    virtual void clearForbiddenStates() = 0;
+
+    /**
      * Performs the minimax search from the current gameState
      * @param isBlackTurn current player
      * @param depth depth of the search tree

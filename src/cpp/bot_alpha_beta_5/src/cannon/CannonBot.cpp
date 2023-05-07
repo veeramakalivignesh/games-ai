@@ -25,7 +25,7 @@ Position getPositionProductWithScalar(float scalar, Position position) {
 
 bool isPositionValid(vector<vector<int>> &gameState, Position &position) {
     int numRows = gameState.size();
-    int numColumns = numRows > 0 ? gameState[0].size() : 0;
+    int numColumns = numRows>0 ? gameState[0].size() : 0;
     return position.i >= 0 && position.i < numRows && position.j >= 0 && position.j < numColumns;
 }
 
@@ -266,39 +266,12 @@ bool isCannonDiagonal(Cannon &cannon) {
     return (cannon.rearEnd.i != cannon.frontEnd.i) && (cannon.rearEnd.j != cannon.frontEnd.j);
 }
 
-bool areStatesEqual(vector<vector<int>> state1, vector<vector<int>> state2) {
-    if (state1.size() != state2.size()) {
-        return false;
-    }
-
-    for (int i = 0; i < state1.size(); i++) {
-        if (state1[i].size() != state2[i].size()) {
-            return false;
-        }
-        for (int j = 0; j < state1[i].size(); j++) {
-            if (state1[i][j] != state2[i][j]) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-/******************** Implementation of class functions ********************/
-
-CannonBot::CannonBot() {
-    this->setMinUtility(-1.0);
-    this->setMaxUtility(11.0);
-    this->setInitialDepthForIDS(5);
-}
-
-void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }
-
-void CannonBot::setForbiddenStates(vector<vector<vector<int>>> forbiddenStates) { this->forbiddenStates = forbiddenStates; }
+//************//
 
 void CannonBot::printGame() {
-    for (int i = 0; i < this->gameState.size(); i++) {
-        for (int j = 0; j < this->gameState[i].size(); j++) {
+    int i, j;
+    for (i = 0; i < 8; i++) {
+        for (j = 0; j < 8; j++) {
             if (this->gameState[i][j] == 2) cout << "T ";
             if (this->gameState[i][j] == 1) cout << "W ";
             if (this->gameState[i][j] == 0) cout << "0 ";
@@ -309,27 +282,11 @@ void CannonBot::printGame() {
     }
 }
 
-void CannonBot::printForbiddenStates() {
-    cout << "Forbidden States: " << endl;
-    for (int n = 0; n < this->forbiddenStates.size(); n++) {
-        for (int i = 0; i < this->forbiddenStates[n].size(); i++) {
-            for (int j = 0; j < this->forbiddenStates[n][i].size(); j++) {
-                if (this->forbiddenStates[n][i][j] == 2) cout << "T ";
-                if (this->forbiddenStates[n][i][j] == 1) cout << "W ";
-                if (this->forbiddenStates[n][i][j] == 0) cout << "0 ";
-                if (this->forbiddenStates[n][i][j] == -1) cout << "B ";
-                if (this->forbiddenStates[n][i][j] == -2) cout << "U ";
-            }
-            cout << endl;
-        }
-        cout << endl;
-    }
-}
+void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }
 
 AbstractBot *CannonBot::clone() {
     CannonBot *cannonBotCopy = new CannonBot();
     cannonBotCopy->setGameState(this->gameState);
-    cannonBotCopy->setForbiddenStates(this->forbiddenStates);
     return cannonBotCopy;
 }
 
@@ -467,17 +424,4 @@ float CannonBot::getUtility() {
     utility += averageSoldierDisplacementFromCenter * 0.01;
 
     return utility;
-}
-
-bool CannonBot::isCurrentStateForbidden() {
-    for (vector<vector<int>> forbiddenState : this->forbiddenStates) {
-        if (areStatesEqual(this->gameState, forbiddenState)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void CannonBot::clearForbiddenStates() {
-    this->forbiddenStates.clear();
 }
