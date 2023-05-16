@@ -1,6 +1,7 @@
 #ifndef BOTINTERFACE_H
 #define BOTINTERFACE_H
 
+#include <cstring>
 #include "../../src/AbstractBot.h"
 #include "../../src/cannon/CannonBot.h"
 
