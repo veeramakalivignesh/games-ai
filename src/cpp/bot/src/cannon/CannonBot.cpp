@@ -289,7 +289,7 @@ bool areStatesEqual(vector<vector<int>> &state1, vector<vector<int>> &state2) {
 CannonBot::CannonBot() {
     this->setMinUtility(-1.0);
     this->setMaxUtility(11.0);
-    this->setInitialDepthForIDS(5);
+    this->setInitialDepthForIDS(4);
 }
 
 void CannonBot::setGameState(vector<vector<int>> gameState) { this->gameState = gameState; }

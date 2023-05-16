@@ -5,7 +5,10 @@ from src.python.cannon_bot_service import CannonBotService
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://ec2-54-210-171-166.compute-1.amazonaws.com:3000", 
+                   "http://games-ai-1184075193.us-east-1.elb.amazonaws.com", 
+                   "http://play.gamesai.co.in",
+                   "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
