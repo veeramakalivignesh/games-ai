@@ -1,7 +1,7 @@
 # Games AI
 
 ## What is it?
-This is a fast-api backend web service that enables the stratrgy game AI bots to interact with the UI at http://play.gamesai.co.in/
+This is a backend web service using FastAPI that facilitates the interaction between strategy game AI bots and the user interface located at http://play.gamesai.co.in
 
 While the web app is built in python, the AI Bot itself is coded in c++ due to its better performance. Bridging of python and cpp was achieved by *ctypes*. More about it [here](https://docs.python.org/3/library/ctypes.html).
 
