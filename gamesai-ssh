@@ -1,1 +1,1 @@
-ssh -i ~/.ssh/games-ai-key-pair.pem ec2-user@ec2-54-210-171-166.compute-1.amazonaws.com
+ssh -i ~/.ssh/gamesai-key-pair-1.pem ec2-user@ec2-3-92-59-237.compute-1.amazonaws.com
