@@ -1,0 +1,1 @@
+web: ./launchscript.sh

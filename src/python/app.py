@@ -8,6 +8,7 @@ app.add_middleware(
     allow_origins=["http://ec2-3-92-59-237.compute-1.amazonaws.com:3000", 
                    "http://games-ai-1184075193.us-east-1.elb.amazonaws.com", 
                    "http://play.gamesai.co.in",
+                   "https://games-ai-ui-abfe0e7a7e95.herokuapp.com",
                    "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
