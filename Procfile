@@ -1,1 +1,1 @@
-web: ./launchscript.sh
+launch: bash launchscript.sh
