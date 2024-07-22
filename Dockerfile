@@ -26,5 +26,7 @@ EXPOSE 8000
 # Define environment variable
 ENV PORT=8000
 
+RUN echo $PORT
+
 # Run the application
 CMD ["uvicorn", "src.python.app:app", "--host", "0.0.0.0", "--port", "8000"]
