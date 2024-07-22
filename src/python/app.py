@@ -2,6 +2,9 @@ from fastapi import Request, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.python.cannon_bot_service import CannonBotService
 
+import os
+print(int(os.getenv("PORT")))
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
