@@ -5,7 +5,7 @@ from src.python.cannon_bot_service import CannonBotService
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[ "http://games.veera-ai.com"
+    allow_origins=[ "http://games.veera-ai.com",
                     "https://games-ai-ui-abfe0e7a7e95.herokuapp.com",
                     "http://localhost:3000"],
     allow_credentials=True,
