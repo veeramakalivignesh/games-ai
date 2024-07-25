@@ -15,6 +15,11 @@ app.add_middleware(
 bot_primary_service = CannonBotService('./bin/botlib.so')
 bot_secondary_service = CannonBotService('./bin/botlib.so')
 
+@app.get("/health")
+async def health():
+    return {}
+
+
 @app.post("/primary/move")
 async def find_best_move(request: Request):
     request_body = await request.json()
