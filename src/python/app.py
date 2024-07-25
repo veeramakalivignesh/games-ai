@@ -18,7 +18,7 @@ bot_secondary_service = CannonBotService('./bin/botlib.so')
 
 @app.get("/health")
 async def health():
-    return {}
+    return {"status": "up"}
 
 
 @app.post("/primary/move")
