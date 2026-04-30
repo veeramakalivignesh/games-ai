@@ -1,6 +1,7 @@
 from fastapi import Request, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.python.cannon_bot_service import CannonBotService
+from src.python.abalone_bot_service import AbaloneBotService
 
 app = FastAPI()
 app.add_middleware(
@@ -14,8 +15,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-bot_primary_service = CannonBotService('./bin/botlib.so')
-bot_secondary_service = CannonBotService('./bin/botlib.so')
+cannon_primary   = CannonBotService('./bin/botlib.so')
+cannon_secondary = CannonBotService('./bin/botlib.so')
+
+abalone_primary   = AbaloneBotService('./bin/botlib.so')
+abalone_secondary = AbaloneBotService('./bin/botlib.so')
 
 @app.get("/health")
 async def health():
@@ -23,15 +27,26 @@ async def health():
 
 
 @app.post("/primary/move")
-async def find_best_move(request: Request):
-    request_body = await request.json()
-    response_move = bot_primary_service.find_best_move(request_body["gameState"], request_body["isBlackTurn"], request_body["forbiddenStates"])
-    response_body = {"move": response_move}
-    return response_body
+async def cannon_primary_move(request: Request):
+    body = await request.json()
+    move = cannon_primary.find_best_move(body["gameState"], body["isBlackTurn"], body["forbiddenStates"])
+    return {"move": move}
 
 @app.post("/secondary/move")
-async def find_best_move(request: Request):
-    request_body = await request.json()
-    response_move = bot_secondary_service.find_best_move(request_body["gameState"], request_body["isBlackTurn"], request_body["forbiddenStates"])
-    response_body = {"move": response_move}
-    return response_body
+async def cannon_secondary_move(request: Request):
+    body = await request.json()
+    move = cannon_secondary.find_best_move(body["gameState"], body["isBlackTurn"], body["forbiddenStates"])
+    return {"move": move}
+
+
+@app.post("/abalone/primary/move")
+async def abalone_primary_move(request: Request):
+    body = await request.json()
+    move = abalone_primary.find_best_move(body["gameState"], body["isBlackTurn"], body["forbiddenStates"])
+    return {"move": move}
+
+@app.post("/abalone/secondary/move")
+async def abalone_secondary_move(request: Request):
+    body = await request.json()
+    move = abalone_secondary.find_best_move(body["gameState"], body["isBlackTurn"], body["forbiddenStates"])
+    return {"move": move}

@@ -1,14 +1,16 @@
 #include "../include/bot/Bot.h"
 #include "./cannon/CannonBot.h"
+#include "./abalone/AbaloneBot.h"
 
 Bot::Bot(Game game) {
     if (game == Cannon) {
         this->botImplementation = new CannonBot();
+    } else if (game == Abalone) {
+        this->botImplementation = new AbaloneBot();
     }
 }
 
 string Bot::findBestMove(bool isBlackTurn) {
-    // giving a time limit of 2 seconds
     MiniMaxResult idsResult = this->botImplementation->iterativeDeepeningSearch(isBlackTurn, 2);
     if (!idsResult.strategy.empty()) {
         cout << idsResult.strategy.size() << endl;
